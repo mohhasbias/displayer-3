@@ -1,0 +1,12 @@
+.login-page {
+  // background: white;
+
+  .login-form {
+    margin-top: 110px;
+  }
+
+  .login-form .form-control::placeholder {
+    text-indent: 20px;
+    font-style: italic;
+  }
+}

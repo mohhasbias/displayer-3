@@ -1,0 +1,10 @@
+@import url("../../shared/variables.css");
+
+.header-component {
+  background: $header-bg;
+
+  .logo {
+    width: 320px;
+    padding: 15px;
+  }
+}
