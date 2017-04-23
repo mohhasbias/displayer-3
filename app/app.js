@@ -3,8 +3,11 @@ var $ = require('jquery');
 
 var displayPage = require('./pages/display');
 var loginPage = require('./pages/login');
+var subscriptionsPage = require('./pages/subscription');
+var displayPreviewPage = require('./pages/display-preview');
+var logoutPage = require('./pages/logout');
 
-require('./app.css');
+require('./app.scss');
 
 // default route
 page('/', () => page.redirect('/display'));

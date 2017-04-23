@@ -51,7 +51,6 @@ function enterTransition() {
 
 function login(evt) {
   evt.preventDefault();
-  console.log('do login');
   store.dispatch(pageActions.setLogin(true));
 }
 
