@@ -8,15 +8,52 @@ require('bootstrap-3-typeahead');
 
 var layout = require('../../components/layout');
 var navTabData = require('../../components/nav-tab-data');
+var firstSubscriptions = require('../../components/first-subscriptions');
 
 page('/subscriptions', () => {
   subscriptionPage();
 });
 
-var activeTabIndex = 0;
+var state = {
+  activeTabIndex: 0,
+  subscriptions: [
+    // {
+    //   "id": "eWRhpRV",
+    //   "channelName": "HIMAMMB"
+    // }
+  ],
+  // selectedChannel: require('../../../data/channel-details.json')
+};
+
 function onTabSelect(index) {
-  activeTabIndex = index;
-  // re-render page
+  setState({
+    activeTabIndex: index
+  });
+}
+
+function onSearchInputChange(evt) {
+  // console.log(evt);
+  // var {id} = $('#search-input').typeahead('getActive');
+  // var {id} = $('#search-input-small').typeahead('getActive');
+  setState({
+    selectedChannel: require('../../../data/channel-details.json')
+  });
+}
+
+function onToggleSubscribe() {
+
+}
+
+function onItemClick() {
+  setState({
+    selectedChannel: require('../../../data/channel-details.json')
+  });
+}
+
+function setState(partialState) {
+  state = Object.assign({}, state, partialState);
+  console.log(state);
+  // re-render
   subscriptionPage();
 }
 
@@ -38,7 +75,7 @@ function subscriptionPage() {
       name: channel.channelName
     });
   });
-  console.log(channels);
+  // console.log(channels);
 
   var html = yo`
     ${layout({
@@ -46,25 +83,52 @@ function subscriptionPage() {
       className: 'subscriptions-page',
       children: yo`
         <div class="container container-subscriptions">
-          <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-              <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
-              <form class="search-form">
-                <input id="search-input" type="text" placeholder="begin your search" class="form-control input-lg">
-              </form>
-              <p class="text-center">or filter your channel search by:</p>
+          ${(!state.subscriptions.length || '') &&
+            (!state.selectedChannel || '') && 
+            yo`
               <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                  ${navTabData({
+                <div class="col-sm-10 col-sm-offset-1">
+                  ${firstSubscriptions({
+                    onSearchInputChange: onSearchInputChange,
                     labels: [ 'MOST UPLOADED CONTENT', 'NEWEST CHANNEL' ],
                     data: [ mostUploadedContent, newestChannel ],
-                    activeTabIndex: activeTabIndex,
-                    onTabSelect: onTabSelect
+                    activeTabIndex: state.activeTabIndex,
+                    onTabSelect: onTabSelect,
+                    onItemClick: onItemClick
                   })}
                 </div>
               </div>
-            </div>
-          </div>
+            `}
+          ${(state.selectedChannel || '') &&
+            yo`
+              <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                  <form>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <input id="search-input-small" type="text" class="form-control" onchange=${onSearchInputChange} >
+                      </div>
+                    </div>
+                  </form>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="javascript:;">
+                        <img class="media-object" src="assets/i/hima-mmb.png" alt="logo hima mmb">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h1 class="media-heading">${state.selectedChannel.channelName}</h1>
+                      <p class="text-muted">${`${state.selectedChannel.contents.length} contents`}</p>
+                    </div>
+                    <div class="media-right">
+                      <button class="btn btn-default" onclick=${onToggleSubscribe}>
+                        + subscribe
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `}
         </div>
       `
     })}
@@ -74,7 +138,11 @@ function subscriptionPage() {
 
   $('#search-input').typeahead({
     source: channels
-  });  
+  });
+
+  $('#search-input-small').typeahead({
+    source: channels
+  });
 }
 
 module.exports = subscriptionPage;

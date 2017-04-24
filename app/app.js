@@ -6,6 +6,7 @@ var loginPage = require('./pages/login');
 var subscriptionsPage = require('./pages/subscription');
 var displayPreviewPage = require('./pages/display-preview');
 var logoutPage = require('./pages/logout');
+var channelsPage = require('./pages/channels');
 
 require('./app.scss');
 

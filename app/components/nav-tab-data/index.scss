@@ -2,6 +2,20 @@
 
 .nav-tab-data {
 
+  .nav-pills {
+    width: 90%;
+    font-size: 12px;
+    margin: auto;
+  }
+
+  .nav-pills>li {
+    border-right: 1px solid #333;
+  }
+
+  .nav-pills>li:last-child {
+    border-right: none;
+  }
+
   .nav-pills>li>a {
     border-radius: 0;
     color: #333;
@@ -13,5 +27,21 @@
   .nav-pills>li.active>a:hover {
     background-color: $highlight-tab-bg;
     color: white;
+  }
+
+  .table-data {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+  }
+
+  .table-data td:first-of-type {
+    font-weight: 700;
+  }
+
+  .link-unstyled {
+    text-decoration: none;
+    color: inherit;
+    background: inherit;
+    display: block;
   }
 }

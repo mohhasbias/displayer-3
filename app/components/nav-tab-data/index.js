@@ -1,6 +1,6 @@
 var yo = require('yo-yo');
 
-module.exports = function({ labels, data, activeTabIndex, onTabSelect }) {
+module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemClick }) {
   require('./index.scss');
 
   activeTabIndex = activeTabIndex || 0;
@@ -16,48 +16,23 @@ module.exports = function({ labels, data, activeTabIndex, onTabSelect }) {
           `;
         })}
       </ul>
-      ${(activeTabIndex === 0 || '') && 
-        yo`
-          <table class="table table-hover">
-            <tbody>
-              ${data[0].map(d => {
-                return yo`
-                  <tr>
-                    ${Object.keys(d).map((key, idx) => {
-                      return yo`
-                        <td>
-                          ${idx === 0? yo`<strong>${d[key]}</strong>` : d[key]}
-                        </td>
-                      `;
-                    })}
-                  </tr>
-                `;
-              })}
-            </tbody>
-          </table>
-        `
-      }
-      ${(activeTabIndex === 1 || '') && 
-        yo`
-          <table class="table table-hover">
-            <tbody>
-              ${data[1].map(d => {
-                return yo`
-                  <tr>
-                    ${Object.keys(d).map((key, idx) => {
-                      return yo`
-                        <td>
-                          ${idx === 0? yo`<strong>${d[key]}</strong>` : d[key]}
-                        </td>
-                      `;
-                    })}
-                  </tr>
-                `;
-              })}
-            </tbody>
-          </table>
-        `
-      }
+      <table class="table table-hover table-data">
+        <tbody>
+          ${data[activeTabIndex].map(d => {
+            return yo`
+              <tr>
+                ${Object.keys(d).map((key, idx) => {
+                  return yo`
+                    <td>
+                      <a href="javascript:;" class="link-unstyled" onclick=${onItemClick} >${d[key]}</a>
+                    </td>
+                  `;
+                })}
+              </tr>
+            `;
+          })}
+        </tbody>
+      </table>
     </div>
   `;
 }
