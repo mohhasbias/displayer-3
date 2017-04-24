@@ -1,0 +1,17 @@
+@import url("../../shared/variables.scss");
+
+.nav-tab-data {
+
+  .nav-pills>li>a {
+    border-radius: 0;
+    color: #333;
+    padding: 20px 15px;
+  }
+
+  .nav-pills>li.active>a, 
+  .nav-pills>li.active>a:focus, 
+  .nav-pills>li.active>a:hover {
+    background-color: $highlight-tab-bg;
+    color: white;
+  }
+}

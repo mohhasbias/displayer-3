@@ -5,8 +5,6 @@ var $ = require('jquery');
 var keycodes = require('keycode-js');
 
 var layout = require('../../components/layout');
-var pageActions = require('../../shared/reducers/page/actions');
-var store = require('../../shared/store');
 
 // routing
 page('/login', (ctx) => {
@@ -23,7 +21,6 @@ page.exit('/login', (ctx, next) => {
 });
 
 function enterTransition() {
-  console.log('enter login');
   // append old page
   var oldPage = $('#app').children().first().clone();
   oldPage.css({
@@ -51,7 +48,7 @@ function enterTransition() {
 
 function login(evt) {
   evt.preventDefault();
-  store.dispatch(pageActions.setLogin(true));
+  page.redirect('/subscriptions');
 }
 
 function loginPage() {
@@ -87,13 +84,6 @@ function loginPage() {
   $(document.body).keyup(evt => {
     if (evt.keyCode === keycodes.KEY_ESCAPE) {
       page.redirect('/display');
-    }
-  });
-
-  store.subscribe(() => {
-    var { loggedIn } = pageActions.selectPage(store.getState());
-    if (loggedIn) {
-      page.redirect('/subscriptions');
     }
   });
 }

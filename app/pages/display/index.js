@@ -20,7 +20,6 @@ page.exit('/display', (ctx, next) => {
 });
 
 function enterTransition() {
-  console.log('enter display');
   // append old page
   var oldPage = $('#app').children().first().clone();
   $(document.body).append(oldPage);
