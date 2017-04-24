@@ -30,6 +30,16 @@ function enterTransition() {
   // render page
   displayPage();
 
+  if(oldPage.length < 1) {
+    return;
+  }
+
+  var originalCSS = {
+    position: $('#app').css('position'),
+    zIndex: $('#app').css('zIndex'),
+    top: $('#app').css('top'),
+  };
+
   $('#app').css({
     position: 'absolute',
     zIndex: -1,
@@ -41,9 +51,7 @@ function enterTransition() {
   var animationClass = 'animated slideOutUp';
   $(oldPage).addClass(animationClass);
   $(oldPage).one(animationEnd, function() {
-    $('#app').css({
-      position: 'static'
-    });
+    $('#app').css(originalCSS);
     oldPage.remove();
   });
 }

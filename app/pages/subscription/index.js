@@ -2,6 +2,7 @@ var diffhtml = require('diffhtml');
 var yo = require('yo-yo');
 var page = require('page');
 var $ = require('jquery');
+var holderjs = require('holderjs');
 
 // jquery plugin
 require('bootstrap-3-typeahead');
@@ -9,6 +10,7 @@ require('bootstrap-3-typeahead');
 var layout = require('../../components/layout');
 var navTabData = require('../../components/nav-tab-data');
 var firstSubscriptions = require('../../components/first-subscriptions');
+var navTabDetails = require('../../components/nav-tab-details');
 
 page('/subscriptions', () => {
   subscriptionPage();
@@ -16,6 +18,7 @@ page('/subscriptions', () => {
 
 var state = {
   activeTabIndex: 0,
+  activeDetailsTab: 'Contents',
   subscriptions: [
     // {
     //   "id": "eWRhpRV",
@@ -126,6 +129,9 @@ function subscriptionPage() {
                       </button>
                     </div>
                   </div>
+                  ${navTabDetails({
+                    channel: state.selectedChannel
+                  })}
                 </div>
               </div>
             `}

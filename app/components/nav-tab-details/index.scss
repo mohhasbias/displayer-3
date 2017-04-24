@@ -1,0 +1,32 @@
+@import url("../../shared/variables.scss");
+
+.nav-tab-details {
+  .img-holder {
+    height: 200px;
+    margin-top: 15px;
+    background: #efefef;
+  }
+
+  .img-holder img {
+    max-width: 100%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-pills {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .nav-pills>li>a,
+  .nav-pills>li>a:hover,
+  .nav-pills>li>a:focus {
+    color: black;
+    font-weight: 300;
+  }
+
+  .nav-pills>li.active>a {
+    background: $highlight-tab-bg;
+    border-radius: 0;
+  }
+}
