@@ -1,8 +1,24 @@
 var yo = require('yo-yo');
+var $ = require('jquery');
+
+//jquery plugin
+require('bootstrap-3-typeahead');
 
 var navTabData = require('../nav-tab-data');
 
-module.exports = function({ labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
+function onChange(callback) {
+  var item = $('#search-input').typeahead('getActive');
+  // console.log(item);
+  callback(item);
+}
+
+module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
+  $(document).ready(() => {
+    $('#search-input').typeahead({
+      source: channels
+    });
+  });
+
   return yo`
     <div>
       <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
@@ -12,7 +28,7 @@ module.exports = function({ labels, data, activeTabIndex, onTabSelect, onSearchI
           type="text" 
           placeholder="begin your search" 
           class="form-control input-lg"
-          onchange=${onSearchInputChange}
+          onchange=${() => onChange(onSearchInputChange)}
           autocomplete="off" >
       </form>
       <p class="text-center">or filter your channel search by:</p>

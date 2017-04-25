@@ -25,7 +25,7 @@ const initialState = {
     //   "channelName": "HIMAMMB"
     // }
   ],
-  // selectedChannel: require('../../../data/channel-details.json')
+  selectedChannel: require('../../../data/channel-details.json')
 };
 
 var state = initialState;
@@ -36,10 +36,13 @@ function onTabSelect(index) {
   });
 }
 
-function onSearchInputChange(evt) {
-  // console.log(evt);
-  // var {id} = $('#search-input').typeahead('getActive');
-  // var {id} = $('#search-input-small').typeahead('getActive');
+function onTabDetailsSelect(tabName) {
+  setState({
+    activeDetailsTab: tabName
+  });
+}
+
+function onSearchInputChange() {
   setState({
     selectedChannel: require('../../../data/channel-details.json')
   });
@@ -62,7 +65,6 @@ function onLogout() {
 
 function setState(partialState) {
   state = Object.assign({}, state, partialState);
-  // console.log(state);
   // re-render
   subscriptionPage();
 }
@@ -101,6 +103,7 @@ function subscriptionPage() {
                 <div class="col-sm-10 col-sm-offset-1">
                   ${firstSubscriptions({
                     onSearchInputChange: onSearchInputChange,
+                    channels: channels,
                     labels: [ 'MOST UPLOADED CONTENT', 'NEWEST CHANNEL' ],
                     data: [ mostUploadedContent, newestChannel ],
                     activeTabIndex: state.activeTabIndex,
@@ -138,7 +141,9 @@ function subscriptionPage() {
                     </div>
                   </div>
                   ${navTabDetails({
-                    channel: state.selectedChannel
+                    channel: state.selectedChannel,
+                    activeTab: state.activeDetailsTab,
+                    onTabSelect: onTabDetailsSelect
                   })}
                 </div>
               </div>
@@ -149,10 +154,6 @@ function subscriptionPage() {
   `;
 
   diffhtml.innerHTML(document.getElementById('app'), html);
-
-  $('#search-input').typeahead({
-    source: channels
-  });
 
   $('#search-input-small').typeahead({
     source: channels
