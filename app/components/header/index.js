@@ -7,7 +7,7 @@ page('*', (ctx, next) => {
   next();
 });
 
-module.exports = function({ loggedIn }) {
+module.exports = function({ loggedIn, onLogout }) {
   require('./index.scss');
   
   return yo`
@@ -23,8 +23,8 @@ module.exports = function({ loggedIn }) {
               <li role="presentation" class="${activePath === '/display-preview'? 'active' : ''}">
                 <a href="/display-preview">DISPLAY PREVIEW</a>
               </li>
-              <li role="presentation" class="${activePath === '/logout'? 'active' : ''} pull-right">
-                <a href="/logout">LOGOUT</a>
+              <li role="presentation" class="pull-right">
+                <a href="javascript:;" onclick=${onLogout} >LOGOUT</a>
               </li>
             </ul>
           `

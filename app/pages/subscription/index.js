@@ -16,7 +16,7 @@ page('/subscriptions', () => {
   subscriptionPage();
 });
 
-var state = {
+const initialState = {
   activeTabIndex: 0,
   activeDetailsTab: 'Contents',
   subscriptions: [
@@ -27,6 +27,8 @@ var state = {
   ],
   // selectedChannel: require('../../../data/channel-details.json')
 };
+
+var state = initialState;
 
 function onTabSelect(index) {
   setState({
@@ -53,9 +55,14 @@ function onItemClick() {
   });
 }
 
+function onLogout() {
+  state = initialState;
+  page.redirect('/logout');
+}
+
 function setState(partialState) {
   state = Object.assign({}, state, partialState);
-  console.log(state);
+  // console.log(state);
   // re-render
   subscriptionPage();
 }
@@ -83,6 +90,7 @@ function subscriptionPage() {
   var html = yo`
     ${layout({
       loggedIn: true,
+      onLogout: onLogout,
       className: 'subscriptions-page',
       children: yo`
         <div class="container container-subscriptions">
