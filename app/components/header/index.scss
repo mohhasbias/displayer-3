@@ -17,9 +17,14 @@
   .nav-pills>li>a {
     border-radius: 0;
     padding: 21px 15px;
-    background: transparent;
     color: white;
   }
+
+  .nav-pills>li>a:hover, 
+  .nav-pills>li>a:focus, 
+  .nav-pills>li>a:active {
+    background: darken($header-bg, 10%);
+  } 
 
   .nav-pills>li.active>a {
     background: $highlight-tab-bg;

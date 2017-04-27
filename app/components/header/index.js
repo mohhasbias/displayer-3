@@ -1,13 +1,16 @@
 var yo = require('yo-yo');
 var page = require('page');
 
+// capture active path through page middleware
 var activePath;
 page('*', (ctx, next) => {
   activePath = ctx.path;
   next();
 });
 
+// render function
 module.exports = function({ loggedIn, onLogout }) {
+  // inject css
   require('./index.scss');
   
   return yo`

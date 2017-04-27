@@ -26,7 +26,9 @@ function enterTransition() {
   oldPage.css({
     position: 'absolute',
     zIndex: -1,
-    top: 0
+    top: 0,
+    left: 0,
+    right: 0
   });
   $(document.body).append(oldPage);
 

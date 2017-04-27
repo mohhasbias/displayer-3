@@ -1,16 +1,22 @@
 var yo = require('yo-yo');
 var $ = require('jquery');
 
-// jquery plugin
+// load jquery plugin
 require('ekko-lightbox');
 
-module.exports = function({ channel, activeTab, onTabSelect }) {
+
+// apply jquery plugin once
+$(document).on('click', '[data-toggle="lightbox"]', function(evt) {
+  evt.preventDefault();
+  $(this).ekkoLightbox();
+});
+
+// render function
+module.exports = function({ channel, activeTab, onTabSelect, colSize }) {
+  // inject css
   require('./index.scss');
 
-  $(document).on('click', '[data-toggle="lightbox"]', function(evt) {
-    evt.preventDefault();
-    $(this).ekkoLightbox();
-  });
+  colSize = colSize || 'col-sm-2';
 
   return yo`
     <div class="nav-tab-details">
@@ -24,10 +30,10 @@ module.exports = function({ channel, activeTab, onTabSelect }) {
       </ul>
       ${(activeTab === 'Contents' || '') &&
         yo`
-          <div class="row">
+          <div class="row content-row">
             ${channel.contents.map((content, idx, contents) => {
               return yo`
-                <div class="col-sm-2">
+                <div class="${colSize}">
                   <a href="${content.url}" data-toggle="lightbox" data-gallery="contents-gallery" data-title="${content.name}">
                     <div class="img-holder">
                       <img src="${content.thumbUrl}" alt="content" data-src="holder.js/150x200">

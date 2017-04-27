@@ -1,6 +1,8 @@
 var yo = require('yo-yo');
 
+// render function
 module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemClick }) {
+  // inject css
   require('./index.scss');
 
   activeTabIndex = activeTabIndex || 0;

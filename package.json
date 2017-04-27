@@ -19,6 +19,7 @@
     "postcss-import": "^9.1.0",
     "postcss-modules": "^0.6.4",
     "postcss-reporter": "^3.0.0",
+    "postcss-sass-colors": "^0.1.1",
     "postcss-url": "^5.1.2",
     "precss": "^1.4.0"
   },
@@ -32,6 +33,7 @@
     "jquery": "^3.2.1",
     "keycode-js": "0.0.4",
     "page": "^1.7.1",
+    "postcss-sass-color-functions": "^1.1.0",
     "yo-yo": "^1.4.0"
   },
   "browserify": {
@@ -43,6 +45,7 @@
             "postcss-import",
             "postcss-url",
             "precss",
+            "postcss-sass-color-functions",
             [
               "autoprefixer",
               {

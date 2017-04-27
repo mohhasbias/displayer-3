@@ -38,12 +38,16 @@ function enterTransition() {
     position: $('#app').css('position'),
     zIndex: $('#app').css('zIndex'),
     top: $('#app').css('top'),
+    left: $('#app').css('left'),
+    right: $('#app').css('right')
   };
 
   $('#app').css({
     position: 'absolute',
     zIndex: -1,
-    top: 0
+    top: 0,
+    left: 0,
+    right: 0
   });
 
   // apply animation
@@ -59,7 +63,7 @@ function enterTransition() {
 // page renderer
 function displayPage() {
   // inject css
-  require('./index.css');
+  require('./index.scss');
 
   var carouselSetting = {
     interval: 3000,

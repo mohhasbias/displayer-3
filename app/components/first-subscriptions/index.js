@@ -1,26 +1,29 @@
 var yo = require('yo-yo');
 var $ = require('jquery');
 
-//jquery plugin
-require('bootstrap-3-typeahead');
-
+// components
 var navTabData = require('../nav-tab-data');
 
+// load jquery plugin
+require('bootstrap-3-typeahead');
+
+// event handler
 function onChange(callback) {
   var item = $('#search-input').typeahead('getActive');
-  // console.log(item);
   callback(item);
 }
 
+// renderer
 module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
-  $(document).ready(() => {
+  // apply jquery plugin
+  $('#search-input').ready(() => {
     $('#search-input').typeahead({
       source: channels
     });
   });
 
   return yo`
-    <div>
+    <div class="first-subscriptions">
       <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
       <form class="search-form">
         <input 

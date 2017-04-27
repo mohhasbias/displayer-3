@@ -29,4 +29,9 @@
   .nav-pills>li.active>a {
     background: $highlight-tab-bg;
   }
+
+  .content-row {
+    height: calc(100vh - 475px);
+    overflow: auto;
+  }
 }
