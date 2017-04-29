@@ -1,10 +1,12 @@
-var yo = require('yo-yo');
-var diffhtml = require('diffhtml');
-var page = require('page');
-var $ = require('jquery');
-var keycodes = require('keycode-js');
+/* global require, module */
 
-var layout = require('../../components/layout');
+const yo = require('yo-yo');
+const diffhtml = require('diffhtml');
+const page = require('page');
+const $ = require('jquery');
+const keycodes = require('keycode-js');
+
+const layout = require('../../components/layout');
 
 // routing
 page('/login', (ctx) => {

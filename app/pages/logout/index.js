@@ -1,4 +1,6 @@
-var page = require('page');
+/* global require */
+
+const page = require('page');
 
 page('/logout', () => {
   page.redirect('/');

@@ -1,63 +1,89 @@
+/* global require, module */
+
 var diffhtml = require('diffhtml');
 var yo = require('yo-yo');
 var page = require('page');
 var $ = require('jquery');
-var holderjs = require('holderjs');
 
 // load jquery plugin
 require('bootstrap-3-typeahead');
 
 // components
-var layout = require('../../components/layout');
-var navTabData = require('../../components/nav-tab-data');
-var firstSubscriptions = require('../../components/first-subscriptions');
-var navTabDetails = require('../../components/nav-tab-details');
+const layout = require('../../components/layout');
+const firstSubscriptions = require('../../components/first-subscriptions');
+const navTabDetails = require('../../components/nav-tab-details');
+
+// root state
+const store = require('../../shared/store');
+const channelActions = require('../../shared/reducers/channels/actions');
 
 // routing
 page('/subscriptions', () => {
+  // set initial state
+  setInitialState(initialState);
+  // append root state to page state
+  // store.subscribe(() => {
+  //   setState({
+  //     channels: channelActions.selectChannelList(store.getState()).items
+  //   });
+  //   // subscriptionPage();
+  // });
+  // // load required data
+  // store.dispatch(channelActions.fetchChannels(store.dispatch));
+
+  // fetch('/data/channels.json')
+  //   .then(res => res.json())
+  //   .then(json => setState({
+  //     channels: json
+  //   }));
+
+  setTimeout(() => {
+    setState({
+      channels: require('../../../data/channels.json')
+    });
+  }, 3000);
+
+  // render page
   subscriptionPage();
 });
 
-// state
+// page state
 const initialState = {
-  activeTabIndex: 0,
-  activeDetailsTab: 'Contents',
-  subscriptions: {
+  // channels: require('../../../data/channels.json'),
+  channels: [],
+  mostUploadedContent: channelActions.selectMostUploadedContent(store.getState()),
+  newestChannel: channelActions.selectNewestChannels(store.getState()),
+  subscriptions: {},//{
     // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json')
-  },
+  //},
+
   // selectedChannel: require('../../../data/channel-details.json'),
-  mostUploadedContent: require('../../../data/most-uploaded-channels.json'),
-  newestChannel: require('../../../data/newest-channels.json'),
-  channels: require('../../../data/channels.json')
+  activeTabIndex: 0,
+  activeDetailsTab: 'Contents'
 };
 
-// state helper
-var state = initialState;
+// page state tool
+function setInitialState(initialState) {
+  this.state = initialState;
+}
 
 function setState(partialState) {
-  state = Object.assign({}, state, partialState);
-  // console.log(state);
+  this.state = Object.assign({}, getState(), partialState);
+  console.log(this.state);
   // re-render
-  subscriptionPage();
+  module.exports();
 }
 
-// event handler
-function onTabSelect(index) {
-  setState({
-    activeTabIndex: index
-  });
+function getState() {
+  return this.state;
 }
 
-function onTabDetailsSelect(tabName) {
-  setState({
-    activeDetailsTab: tabName
-  });
-}
-
+// page state helper
 function isSubscribed(channelId) {
-  return state.subscriptions[channelId]? true: false;
+  return getState().subscriptions[channelId]? true: false;
 }
 
+// state modifier
 function setSelectedChannel(channelId) {
   var channelDetails = {};
   switch(channelId) {
@@ -76,27 +102,40 @@ function setSelectedChannel(channelId) {
   });
 }
 
+// event handler
+function onTabSelect(index) {
+  setState({
+    activeTabIndex: index
+  });
+}
+
+function onTabDetailsSelect(tabName) {
+  setState({
+    activeDetailsTab: tabName
+  });
+}
+
 function onSearchInputChange(channel) {
   setSelectedChannel(channel.id);
 }
 
 function onToggleSubscribe() {
   setState({
-    selectedChannel: Object.assign({}, state.selectedChannel, {
-      subscribed: !state.selectedChannel.subscribed
+    selectedChannel: Object.assign({}, getState().selectedChannel, {
+      subscribed: !getState().selectedChannel.subscribed
     })
   });
   // update subscriptions
-  if(state.selectedChannel.subscribed) {
+  if(getState().selectedChannel.subscribed) {
     setState({
-      subscriptions: Object.assign({}, state.subscriptions, {
-        [state.selectedChannel.id]: state.selectedChannel
+      subscriptions: Object.assign({}, getState().subscriptions, {
+        [getState().selectedChannel.id]: getState().selectedChannel
       })
     });  
   } else {
-    delete state.subscriptions[state.selectedChannel.id];
+    delete getState().subscriptions[getState().selectedChannel.id];
     setState({
-      subscriptions: state.subscriptions
+      subscriptions: getState().subscriptions
     });
   }
 }
@@ -108,7 +147,7 @@ function onItemClick() {
 }
 
 function onLogout() {
-  state = initialState;
+  setInitialState(initialState);
   page.redirect('/logout');
 }
 
@@ -118,16 +157,16 @@ function subscriptionPage() {
   require('./index.scss');
 
   // data preparation
-  var mostUploadedContent = state.mostUploadedContent;
+  var mostUploadedContent = getState().mostUploadedContent;
   mostUploadedContent = mostUploadedContent.map( channel => {
     return Object.assign({}, channel, {
       total: `${channel.total} contents`
     });
   });
 
-  var newestChannel = state.newestChannel;
+  var newestChannel = getState().newestChannel;
 
-  var channels = state.channels;
+  var channels = getState().channels;
   channels = channels.map(channel => {
     return Object.assign({}, channel, {
       name: channel.channelName
@@ -142,8 +181,8 @@ function subscriptionPage() {
       className: 'subscriptions-page',
       children: yo`
         <div class="container container-subscriptions">
-          ${(!Object.keys(state.subscriptions).length || '') &&
-            (!state.selectedChannel || '') && 
+          ${(!Object.keys(getState().subscriptions).length || '') &&
+            (!getState().selectedChannel || '') && 
             yo`
               <div class="row">
                 <div class="col-sm-10 col-sm-offset-1">
@@ -152,7 +191,7 @@ function subscriptionPage() {
                     channels: channels,
                     labels: [ 'MOST UPLOADED CONTENT', 'NEWEST CHANNEL' ],
                     data: [ mostUploadedContent, newestChannel ],
-                    activeTabIndex: state.activeTabIndex,
+                    activeTabIndex: getState().activeTabIndex,
                     onTabSelect: onTabSelect,
                     onItemClick: onItemClick
                   })}
@@ -160,7 +199,7 @@ function subscriptionPage() {
               </div>
             `}
           <div class="row">
-            ${(Object.keys(state.subscriptions).length || '') &&
+            ${(Object.keys(getState().subscriptions).length || '') &&
               yo`
                 <div class="col-sm-3 col-sm-offset-1">
                   <div class="panel panel-default">
@@ -168,12 +207,12 @@ function subscriptionPage() {
                       <h3 class="panel-title">List of subscribed channel</h3>
                     </div>
                     <div class="list-group">
-                      ${Object.keys(state.subscriptions).map(key => {
-                        var activeClass = state.subscriptions[key].id === state.selectedChannel.id? 'active' : '';
+                      ${Object.keys(getState().subscriptions).map(key => {
+                        var activeClass = getState().subscriptions[key].id === getState().selectedChannel.id? 'active' : '';
                         return yo`
-                          <a href="javascript:;" class="list-group-item ${activeClass}" onclick=${() => setSelectedChannel(state.subscriptions[key].id)} >
-                            <span class="badge">${state.subscriptions[key].contents.length}</span>
-                            ${state.subscriptions[key].channelName}
+                          <a href="javascript:;" key="${getState().subscriptions[key].id}" class="list-group-item ${activeClass}" onclick=${() => setSelectedChannel(getState().subscriptions[key].id)} >
+                            <span class="badge">${getState().subscriptions[key].contents.length}</span>
+                            ${getState().subscriptions[key].channelName}
                           </a>
                         `;
                       })}
@@ -182,8 +221,8 @@ function subscriptionPage() {
                 </div>
               `
             }
-            <div class="${Object.keys(state.subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
-              ${(state.selectedChannel || '') &&
+            <div class="${Object.keys(getState().subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
+              ${(getState().selectedChannel || '') &&
                 yo`
                   <form class="search-form">
                     <div class="row">
@@ -194,7 +233,6 @@ function subscriptionPage() {
                           class="form-control" 
                           onchange=${() => {
                             var item = $('#search-input-small').typeahead('getActive');
-                            // console.log(item);
                             onSearchInputChange(item);
                           }}
                           autocomplete="off"
@@ -204,30 +242,30 @@ function subscriptionPage() {
                   </form>
                 `
               }
-              ${(state.selectedChannel || '') &&
+              ${(getState().selectedChannel || '') &&
                 yo`
                   <div>
                     <div class="media">
                       <div class="media-left">
                         <a href="javascript:;">
-                          <img class="media-object" src="assets/i/hima-mmb.png" alt="logo hima mmb">
+                          <img class="media-object" src="${getState().selectedChannel.channelLogo}" alt="logo hima mmb">
                         </a>
                       </div>
                       <div class="media-body">
-                        <h1 class="media-heading">${state.selectedChannel.channelName}</h1>
-                        <p class="text-muted">${`${state.selectedChannel.contents.length} contents`}</p>
+                        <h1 class="media-heading">${getState().selectedChannel.channelName}</h1>
+                        <p class="text-muted">${`${getState().selectedChannel.contents.length} contents`}</p>
                       </div>
                       <div class="media-right">
-                        ${(state.selectedChannel.subscribed || '') &&
+                        ${(getState().selectedChannel.subscribed || '') &&
                           yo`
-                            <button class="btn btn-danger" onclick=${onToggleSubscribe}>
+                            <button class="btn btn-danger" onclick=${onToggleSubscribe} >
                               unsubscribe
                             </button>
                           `
                         }
-                        ${(!state.selectedChannel.subscribed || '') &&
+                        ${(!getState().selectedChannel.subscribed || '') &&
                           yo`
-                          <button class="btn btn-success" onclick=${onToggleSubscribe}>
+                          <button class="btn btn-success" onclick=${onToggleSubscribe} >
                             + subscribe
                           </button>
                           `
@@ -235,10 +273,10 @@ function subscriptionPage() {
                       </div>
                     </div>
                     ${navTabDetails({
-                      channel: state.selectedChannel,
-                      activeTab: state.activeDetailsTab,
+                      channel: getState().selectedChannel,
+                      activeTab: getState().activeDetailsTab,
                       onTabSelect: onTabDetailsSelect,
-                      colSize: Object.keys(state.subscriptions).length? 'col-sm-4' : 'col-sm-2'
+                      colSize: Object.keys(getState().subscriptions).length? 'col-sm-4' : 'col-sm-2'
                     })}
                   </div>
                 `
@@ -254,6 +292,7 @@ function subscriptionPage() {
   diffhtml.innerHTML(document.getElementById('app'), html);
 
   // apply jquery plugin after DOM ready
+  $('#search-input-small').typeahead('destroy');
   $('#search-input-small').typeahead({
     source: channels
   });

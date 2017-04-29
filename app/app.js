@@ -1,11 +1,13 @@
-var page = require('page');
-var $ = require('jquery');
+/* global require */
 
-var displayPage = require('./pages/display');
-var loginPage = require('./pages/login');
-var subscriptionsPage = require('./pages/subscription');
-var displayPreviewPage = require('./pages/display-preview');
-var logoutPage = require('./pages/logout');
+const page = require('page');
+
+// attach pages
+require('./pages/display');
+require('./pages/login');
+require('./pages/subscription');
+require('./pages/display-preview');
+require('./pages/logout');
 
 // global css for all pages
 require('./app.scss');

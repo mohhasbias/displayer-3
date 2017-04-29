@@ -1,7 +1,9 @@
-var yo = require('yo-yo');
+/* global require, module */
+
+const yo = require('yo-yo');
 
 // components
-var header = require('../header');
+const header = require('../header');
 
 // render function
 module.exports = function({ className, children, loggedIn, onLogout }) {

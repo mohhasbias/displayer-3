@@ -1,4 +1,6 @@
-var yo = require('yo-yo');
+/* global require, module */
+
+const yo = require('yo-yo');
 
 // render function
 module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemClick }) {
@@ -23,7 +25,7 @@ module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemCli
           ${data[activeTabIndex].map(d => {
             return yo`
               <tr>
-                ${Object.keys(d).map((key, idx) => {
+                ${Object.keys(d).map((key) => {
                   return yo`
                     <td>
                       <a href="javascript:;" class="link-unstyled" onclick=${onItemClick} >${d[key]}</a>

@@ -4,8 +4,8 @@
   "description": "Boilerplate for single page application powered by browserify",
   "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "budo app/app.js:dist/bundle.js --live --open --pushstate",
+    "test": "eslint .",
+    "dev": "budo app/app.js:dist/bundle.js --host localhost --live --open --pushstate",
     "build": "browserify app/app.js -o dist/bundle.js"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "browserify-shim": "^3.8.14",
     "budo": "^9.4.7",
     "cssnano": "^3.10.0",
+    "eslint": "^3.19.0",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-import": "^9.1.0",
     "postcss-modules": "^0.6.4",
@@ -29,7 +30,9 @@
     "bootstrap-3-typeahead": "^4.0.2",
     "diffhtml": "^0.9.2",
     "ekko-lightbox": "^5.1.1",
+    "es6-promise": "^4.1.0",
     "holderjs": "^2.9.4",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
     "keycode-js": "0.0.4",
     "page": "^1.7.1",

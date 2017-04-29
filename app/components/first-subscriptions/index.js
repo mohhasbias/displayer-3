@@ -1,8 +1,10 @@
-var yo = require('yo-yo');
-var $ = require('jquery');
+/* global require, module */
+
+const yo = require('yo-yo');
+const $ = require('jquery');
 
 // components
-var navTabData = require('../nav-tab-data');
+const navTabData = require('../nav-tab-data');
 
 // load jquery plugin
 require('bootstrap-3-typeahead');
@@ -17,6 +19,7 @@ function onChange(callback) {
 module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
   // apply jquery plugin
   $('#search-input').ready(() => {
+    $('#search-input').typeahead('destroy');
     $('#search-input').typeahead({
       source: channels
     });
@@ -27,6 +30,7 @@ module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect,
       <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
       <form class="search-form">
         <input 
+          key="${channels.length}"
           id="search-input" 
           type="text" 
           placeholder="begin your search" 

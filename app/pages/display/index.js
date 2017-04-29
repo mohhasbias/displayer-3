@@ -1,9 +1,13 @@
-var yo = require('yo-yo');
-var diffhtml = require('diffhtml');
-var bootstrap = require('bootstrap');
-var $ = require('jquery');
-var page = require('page');
-var keycodes = require('keycode-js');
+/* global require, module */
+
+const yo = require('yo-yo');
+const diffhtml = require('diffhtml');
+const $ = require('jquery');
+const page = require('page');
+const keycodes = require('keycode-js');
+
+// load jquery plugin
+require('bootstrap');
 
 // routing
 page('/display', (ctx) => {

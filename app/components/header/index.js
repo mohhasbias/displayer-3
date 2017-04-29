@@ -1,5 +1,7 @@
-var yo = require('yo-yo');
-var page = require('page');
+/* global require, module */
+
+const yo = require('yo-yo');
+const page = require('page');
 
 // capture active path through page middleware
 var activePath;
