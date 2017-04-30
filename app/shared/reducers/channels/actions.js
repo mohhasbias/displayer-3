@@ -1,32 +1,82 @@
-/* global require, module */
+/* global module */
 
 const FETCH_CHANNELS = 'FETCH_CHANNELS';
 const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';
 const FAIL_FETCH_CHANNELS = 'FAIL_FETCH_CHANNELS';
 
+const ORDER_TOTAL = 'mostUploaded';
+const ORDER_DATE_CREATED = 'newest';
+const ORDER_NONE = 'list';
+
 function selectChannelList(rootState) {
-  return rootState.channels.list;
+  return rootState.channels[ORDER_NONE];
 }
 
-function selectMostUploadedContent(rootState) {
-  return rootState.channels.mostUploadedContent || require('../../../../data/most-uploaded-channels.json');
+function selectChannelMostUploaded(rootState) {
+  return rootState.channels[ORDER_TOTAL];
 }
 
 function selectNewestChannels(rootState) {
-  return require('../../../../data/newest-channels.json');
+  return rootState.channels[ORDER_DATE_CREATED];
 }
 
-function fetchChannels(dispatch) {
+function fetchChannelList(dispatch) {
   return {
     type: FETCH_CHANNELS,
-    payload: dispatch
+    payload: {
+      order: ORDER_NONE,
+      dispatch
+    }
   };
 }
 
-function receiveChannels(data) {
+function receiveChannelList(data) {
   return {
     type: RECEIVE_CHANNELS,
-    payload: data
+    payload: {
+      order: ORDER_NONE,
+      data
+    }
+  };
+}
+
+function fetchChannelMostUploaded(dispatch) {
+  return {
+    type: FETCH_CHANNELS,
+    payload: {
+      order: ORDER_TOTAL,
+      dispatch
+    }
+  };
+}
+
+function receiveChannelMostUploaded(data) {
+  return {
+    type: RECEIVE_CHANNELS,
+    payload: {
+      order: ORDER_TOTAL,
+      data
+    }
+  };
+}
+
+function fetchNewestChannels(dispatch) {
+  return {
+    type: FETCH_CHANNELS,
+    payload: {
+      order: ORDER_DATE_CREATED,
+      dispatch
+    }
+  };
+}
+
+function receiveNewestChannels(data) {
+  return {
+    type: RECEIVE_CHANNELS,
+    payload: {
+      order: ORDER_DATE_CREATED,
+      data
+    }
   };
 }
 
@@ -34,9 +84,20 @@ module.exports = {
   FETCH_CHANNELS,
   RECEIVE_CHANNELS,
   FAIL_FETCH_CHANNELS,
+
+  ORDER_TOTAL,
+  ORDER_DATE_CREATED,
+  ORDER_NONE,
+
+  fetchChannelList,
+  receiveChannelList,
   selectChannelList,
-  selectMostUploadedContent,
-  selectNewestChannels,
-  fetchChannels,
-  receiveChannels
+
+  fetchChannelMostUploaded,
+  receiveChannelMostUploaded,
+  selectChannelMostUploaded,
+
+  fetchNewestChannels,
+  receiveNewestChannels,
+  selectNewestChannels
 };

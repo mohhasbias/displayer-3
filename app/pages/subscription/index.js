@@ -22,37 +22,23 @@ page('/subscriptions', () => {
   // set initial state
   setInitialState(initialState);
   // append root state to page state
-  // store.subscribe(() => {
-  //   setState({
-  //     channels: channelActions.selectChannelList(store.getState()).items
-  //   });
-  //   // subscriptionPage();
-  // });
-  // // load required data
-  // store.dispatch(channelActions.fetchChannels(store.dispatch));
-
-  // fetch('/data/channels.json')
-  //   .then(res => res.json())
-  //   .then(json => setState({
-  //     channels: json
-  //   }));
-
-  setTimeout(() => {
-    setState({
-      channels: require('../../../data/channels.json')
-    });
-  }, 3000);
-
-  // render page
-  subscriptionPage();
+  store.subscribe(() => mapStoreToState(store));
+  // load required data
+  store.dispatch(channelActions.fetchChannelList(store.dispatch));
+  store.dispatch(channelActions.fetchChannelMostUploaded(store.dispatch));
+  store.dispatch(channelActions.fetchNewestChannels(store.dispatch));
 });
+
+function mapStoreToState(store) {
+  setState({
+    channels: channelActions.selectChannelList(store.getState()).items,
+    mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).items,
+    newestChannel: channelActions.selectNewestChannels(store.getState()).items
+  });
+}
 
 // page state
 const initialState = {
-  // channels: require('../../../data/channels.json'),
-  channels: [],
-  mostUploadedContent: channelActions.selectMostUploadedContent(store.getState()),
-  newestChannel: channelActions.selectNewestChannels(store.getState()),
   subscriptions: {},//{
     // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json')
   //},
@@ -69,9 +55,9 @@ function setInitialState(initialState) {
 
 function setState(partialState) {
   this.state = Object.assign({}, getState(), partialState);
-  console.log(this.state);
-  // re-render
-  module.exports();
+  console.log(getState());
+  // re-render page
+  subscriptionPage();
 }
 
 function getState() {
