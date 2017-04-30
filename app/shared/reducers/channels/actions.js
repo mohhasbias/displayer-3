@@ -1,4 +1,6 @@
-/* global module */
+/* global require, module */
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 const FETCH_CHANNELS = 'FETCH_CHANNELS';
 const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';
@@ -21,11 +23,13 @@ function selectNewestChannels(rootState) {
 }
 
 function fetchChannelList(dispatch) {
+  // side effects
+  fetchChannels(ORDER_NONE, dispatch, receiveChannelList);
+
   return {
     type: FETCH_CHANNELS,
     payload: {
-      order: ORDER_NONE,
-      dispatch
+      order: ORDER_NONE
     }
   };
 }
@@ -41,11 +45,13 @@ function receiveChannelList(data) {
 }
 
 function fetchChannelMostUploaded(dispatch) {
+  // side effects
+  fetchChannels(ORDER_TOTAL, dispatch, receiveChannelMostUploaded);
+
   return {
     type: FETCH_CHANNELS,
     payload: {
-      order: ORDER_TOTAL,
-      dispatch
+      order: ORDER_TOTAL
     }
   };
 }
@@ -61,11 +67,13 @@ function receiveChannelMostUploaded(data) {
 }
 
 function fetchNewestChannels(dispatch) {
+  // side effects
+  fetchChannels(ORDER_DATE_CREATED, dispatch, receiveNewestChannels);
+
   return {
     type: FETCH_CHANNELS,
     payload: {
-      order: ORDER_DATE_CREATED,
-      dispatch
+      order: ORDER_DATE_CREATED
     }
   };
 }
@@ -101,3 +109,16 @@ module.exports = {
   receiveNewestChannels,
   selectNewestChannels
 };
+
+////////////////////////////////////////
+function fetchChannels(order, dispatch, receiveAction) {
+  const fetchURL = {
+    [ORDER_NONE]: '/data/channels.json',
+    [ORDER_TOTAL]: '/data/most-uploaded-channels.json',
+    [ORDER_DATE_CREATED]: '/data/newest-channels.json'
+  };
+
+  fetch(fetchURL[order])
+    .then(res => res.json())
+    .then(json => dispatch(receiveAction(json)));
+}

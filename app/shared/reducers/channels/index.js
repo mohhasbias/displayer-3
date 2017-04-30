@@ -33,28 +33,8 @@ const initialState = {
 };
 
 module.exports = function(state = initialState, action) {
-  var dispatch;
-
-  const fetchURL = {
-    [actions.ORDER_NONE]: '/data/channels.json',
-    [actions.ORDER_TOTAL]: '/data/most-uploaded-channels.json',
-    [actions.ORDER_DATE_CREATED]: '/data/newest-channels.json'
-  }
-
-  const receiveChannel = {
-    [actions.ORDER_NONE]: actions.receiveChannelList,
-    [actions.ORDER_TOTAL]: actions.receiveChannelMostUploaded,
-    [actions.ORDER_DATE_CREATED]: actions.receiveNewestChannels
-  }
-
   switch(action.type) {
     case actions.FETCH_CHANNELS:
-      dispatch = action.payload.dispatch;
-
-      fetch(fetchURL[action.payload.order])
-        .then(res => res.json())
-        .then(json => dispatch(receiveChannel[action.payload.order](json)));
-
       return Object.assign({}, state, {
         [action.payload.order]: channels(state[action.payload.order], action)
       });

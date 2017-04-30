@@ -29,6 +29,7 @@ page('/subscriptions', () => {
   store.dispatch(channelActions.fetchNewestChannels(store.dispatch));
 });
 
+// append store to page state
 function mapStoreToState(store) {
   setState({
     channels: channelActions.selectChannelList(store.getState()).items,
@@ -39,9 +40,9 @@ function mapStoreToState(store) {
 
 // page state
 const initialState = {
-  subscriptions: {},//{
-    // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json')
-  //},
+  subscriptions: {
+    "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json')
+  },
 
   // selectedChannel: require('../../../data/channel-details.json'),
   activeTabIndex: 0,
@@ -194,7 +195,7 @@ function subscriptionPage() {
                     </div>
                     <div class="list-group">
                       ${Object.keys(getState().subscriptions).map(key => {
-                        var activeClass = getState().subscriptions[key].id === getState().selectedChannel.id? 'active' : '';
+                        var activeClass = getState().selectedChannel && getState().subscriptions[key].id === getState().selectedChannel.id? 'active' : '';
                         return yo`
                           <a href="javascript:;" key="${getState().subscriptions[key].id}" class="list-group-item ${activeClass}" onclick=${() => setSelectedChannel(getState().subscriptions[key].id)} >
                             <span class="badge">${getState().subscriptions[key].contents.length}</span>
@@ -208,7 +209,7 @@ function subscriptionPage() {
               `
             }
             <div class="${Object.keys(getState().subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
-              ${(getState().selectedChannel || '') &&
+              ${(getState().selectedChannel || Object.keys(getState().subscriptions).length || '') &&
                 yo`
                   <form class="search-form">
                     <div class="row">
