@@ -1,42 +1,23 @@
 /* global require, module */
 
 const yo = require('yo-yo');
-const $ = require('jquery');
 
 // components
 const navTabData = require('../nav-tab-data');
-
-// load jquery plugin
-require('bootstrap-3-typeahead');
-
-// event handler
-function onChange(callback) {
-  var item = $('#search-input').typeahead('getActive');
-  callback(item);
-}
+const inputTypeahead = require('../input-typeahead');
 
 // renderer
 module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
-  // apply jquery plugin
-  $('#search-input').ready(() => {
-    $('#search-input').typeahead('destroy');
-    $('#search-input').typeahead({
-      source: channels
-    });
-  });
-
   return yo`
     <div class="first-subscriptions">
       <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
       <form class="search-form">
-        <input 
-          key="${channels.length}"
-          id="search-input" 
-          type="text" 
-          placeholder="begin your search" 
-          class="form-control input-lg"
-          onchange=${() => onChange(onSearchInputChange)}
-          autocomplete="off" >
+        ${inputTypeahead({
+          source: channels,
+          onSearchInputChange: onSearchInputChange,
+          placeholder: 'begin your search',
+          className: 'input-lg'
+        })}
       </form>
       <p class="text-center">or filter your channel search by:</p>
       <div class="row">

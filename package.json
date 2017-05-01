@@ -37,6 +37,7 @@
     "keycode-js": "0.0.4",
     "page": "^1.7.1",
     "postcss-sass-color-functions": "^1.1.0",
+    "shortid": "^2.2.8",
     "yo-yo": "^1.4.0"
   },
   "browserify": {

@@ -13,6 +13,7 @@ const layout = require('../../components/layout');
 const firstSubscriptions = require('../../components/first-subscriptions');
 const navTabDetails = require('../../components/nav-tab-details');
 const subscriptionsList = require('../../components/subscriptions-list');
+const inputTypeahead = require('../../components/input-typeahead');
 
 // root state
 const store = require('../../shared/store');
@@ -42,8 +43,8 @@ function mapStoreToState(store) {
 // page state
 const initialState = {
   subscriptions: {
-    "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
-    "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
+    // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
+    // "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
   },
 
   // selectedChannel: require('../../../data/channel-details.json'),
@@ -107,7 +108,9 @@ function onTabDetailsSelect(tabName) {
 }
 
 function onSearchInputChange(channel) {
-  setSelectedChannel(channel.id);
+  if(channel && channel.id) {
+    setSelectedChannel(channel.id);
+  }
 }
 
 function onToggleSubscribe() {
@@ -207,16 +210,10 @@ function subscriptionPage() {
                   <form class="search-form">
                     <div class="row">
                       <div class="col-sm-6">
-                        <input 
-                          id="search-input-small" 
-                          type="text" 
-                          class="form-control" 
-                          onchange=${() => {
-                            var item = $('#search-input-small').typeahead('getActive');
-                            onSearchInputChange(item);
-                          }}
-                          autocomplete="off"
-                          >
+                        ${inputTypeahead({
+                          source: channels,
+                          onSearchInputChange: onSearchInputChange
+                        })}
                       </div>
                     </div>
                   </form>
@@ -270,12 +267,6 @@ function subscriptionPage() {
 
   // render to DOM
   diffhtml.innerHTML(document.getElementById('app'), html);
-
-  // apply jquery plugin after DOM ready
-  $('#search-input-small').typeahead('destroy');
-  $('#search-input-small').typeahead({
-    source: channels
-  });
 }
 
 module.exports = subscriptionPage;
