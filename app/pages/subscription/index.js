@@ -3,10 +3,6 @@
 var diffhtml = require('diffhtml');
 var yo = require('yo-yo');
 var page = require('page');
-var $ = require('jquery');
-
-// load jquery plugin
-require('bootstrap-3-typeahead');
 
 // components
 const layout = require('../../components/layout');
@@ -21,6 +17,16 @@ const channelActions = require('../../shared/reducers/channels/actions');
 
 // routing
 page('/subscriptions', () => {
+  const initialState = {
+    subscriptions: {
+      // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
+      // "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
+    },
+
+    // selectedChannel: require('../../../data/channel-details.json'),
+    activeTabIndex: 0,
+    activeDetailsTab: 'Contents'
+  };
   // set initial state
   setInitialState(initialState);
   // append root state to page state
@@ -39,18 +45,6 @@ function mapStoreToState(store) {
     newestChannel: channelActions.selectNewestChannels(store.getState()).items
   });
 }
-
-// page state
-const initialState = {
-  subscriptions: {
-    // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
-    // "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
-  },
-
-  // selectedChannel: require('../../../data/channel-details.json'),
-  activeTabIndex: 0,
-  activeDetailsTab: 'Contents'
-};
 
 // page state tool
 function setInitialState(initialState) {
