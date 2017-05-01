@@ -12,6 +12,7 @@ require('bootstrap-3-typeahead');
 const layout = require('../../components/layout');
 const firstSubscriptions = require('../../components/first-subscriptions');
 const navTabDetails = require('../../components/nav-tab-details');
+const subscriptionsList = require('../../components/subscriptions-list');
 
 // root state
 const store = require('../../shared/store');
@@ -192,27 +193,11 @@ function subscriptionPage() {
             ${(Object.keys(getState().subscriptions).length || '') &&
               yo`
                 <div class="col-sm-3 col-sm-offset-1">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">List of subscribed channel</h3>
-                    </div>
-                    <div class="list-group">
-                      ${Object.keys(getState().subscriptions).map(key => {
-                        var activeClass = getState().selectedChannel && getState().subscriptions[key].id === getState().selectedChannel.id? 'active' : '';
-                        return yo`
-                          <a 
-                            href="javascript:;" 
-                            key="${getState().subscriptions[key].channelName}" 
-                            class="list-group-item ${activeClass}" 
-                            onclick=${() => setSelectedChannel(getState().subscriptions[key].id)} 
-                          >
-                            <span class="badge">${getState().subscriptions[key].contents.length}</span>
-                            ${getState().subscriptions[key].channelName}
-                          </a>
-                        `;
-                      })}
-                    </div>
-                  </div>
+                  ${subscriptionsList({
+                    subscriptions: getState().subscriptions,
+                    selectedChannel: getState().selectedChannel,
+                    onSelectChannel: setSelectedChannel
+                  })}
                 </div>
               `
             }
