@@ -1,0 +1,14 @@
+{
+  "id": "46Juzcyx",
+  "channelName": "HIMAELKA",
+  "channelLogo": "assets/i/hima-elka.png",
+  "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod ipsum id nibh cursus varius. Suspendisse rhoncus tristique ligula at consequat. Sed eu dignissim leo. Phasellus ullamcorper, augue hendrerit consequat ultricies, metus lacus ullamcorper ante, eget aliquet orci ligula id dui. In tempor justo imperdiet semper egestas. Aliquam aliquet feugiat arcu, eget condimentum felis maximus et. Vestibulum euismod ultricies congue. Donec vehicula nisl et eros semper, non porta erat elementum. Sed enim diam, pharetra ut faucibus eu, blandit nec purus. Proin bibendum at leo non euismod. Suspendisse potenti. In elementum eu nisl elementum ultricies. Donec semper, quam vitae iaculis vehicula, sem leo bibendum augue, sed vestibulum elit dolor sit amet enim. Duis id bibendum odio, quis gravida nunc.",
+  "contents": [
+    {
+      "url": "assets/i/FP.png",
+      "type": "image/png",
+      "name": "FP",
+      "thumbUrl": "assets/i/FP-thumb.png"
+    }
+  ]
+}

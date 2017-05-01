@@ -41,7 +41,8 @@ function mapStoreToState(store) {
 // page state
 const initialState = {
   subscriptions: {
-    "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json')
+    "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
+    "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
   },
 
   // selectedChannel: require('../../../data/channel-details.json'),
@@ -56,7 +57,7 @@ function setInitialState(initialState) {
 
 function setState(partialState) {
   this.state = Object.assign({}, getState(), partialState);
-  console.log(getState());
+  // console.log(getState());
   // re-render page
   subscriptionPage();
 }
@@ -80,6 +81,8 @@ function setSelectedChannel(channelId) {
     case '23TplPdS':
       channelDetails = require('../../../data/channel-details-23TplPdS.json');
       break;
+    case '46Juzcyx':
+      channelDetails = require('../../../data/channel-details-46Juzcyx.json');
   }
 
   setState({
@@ -197,7 +200,12 @@ function subscriptionPage() {
                       ${Object.keys(getState().subscriptions).map(key => {
                         var activeClass = getState().selectedChannel && getState().subscriptions[key].id === getState().selectedChannel.id? 'active' : '';
                         return yo`
-                          <a href="javascript:;" key="${getState().subscriptions[key].id}" class="list-group-item ${activeClass}" onclick=${() => setSelectedChannel(getState().subscriptions[key].id)} >
+                          <a 
+                            href="javascript:;" 
+                            key="${getState().subscriptions[key].channelName}" 
+                            class="list-group-item ${activeClass}" 
+                            onclick=${() => setSelectedChannel(getState().subscriptions[key].id)} 
+                          >
                             <span class="badge">${getState().subscriptions[key].contents.length}</span>
                             ${getState().subscriptions[key].channelName}
                           </a>
