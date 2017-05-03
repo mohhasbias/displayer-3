@@ -3,7 +3,6 @@
 const diffhtml = require('diffhtml');
 const yo = require('yo-yo');
 const page = require('page');
-const EventEmitter = require('events').EventEmitter;
 
 // components
 const layout = require('../../components/layout');
@@ -16,7 +15,8 @@ page('/display-preview', () => {
     subscriptions: {
       "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
       "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
-    }
+    },
+    selectedChannel: require('../../../data/channel-details-23TplPdS.json')
   };
 
   setInitialState(initialState);
@@ -87,6 +87,8 @@ function displayPreviewPage() {
     pause: null
   };
 
+  require('./index.scss');
+
   var html = yo`
     ${layout({
       loggedIn: true,
@@ -103,10 +105,12 @@ function displayPreviewPage() {
                   })}
                 </div>
                 <div class="col-sm-8">
-                  ${carousel({
-                    carouselSetting: carouselSetting,
-                    playlist: getState().selectedChannel && getState().selectedChannel.contents
-                  })}
+                  <div class="tv-placeholder">
+                    ${carousel({
+                      carouselSetting: carouselSetting,
+                      playlist: getState().selectedChannel && getState().selectedChannel.contents
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

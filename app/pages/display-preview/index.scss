@@ -1,0 +1,23 @@
+.container-display-preview {
+  .tv-placeholder {
+    background-color: #efefef;
+    width: 100%;
+    height: 50vh;
+    box-shadow: 1px 6px 14px 4px rgba(0, 0, 0, 0.19);
+    border: solid 10px #333;
+  }
+  
+  .tv-placeholder .carousel {
+    height: 100%;
+  }
+  
+  .tv-placeholder .carousel-inner,
+  .tv-placeholder .carousel-inner .item, 
+  .tv-placeholder .carousel-inner .item img {
+    height: inherit;
+  }
+
+  .tv-placeholder .carousel-inner .item img {
+    margin: auto;
+  }
+}

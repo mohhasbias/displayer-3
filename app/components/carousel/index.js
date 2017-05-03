@@ -38,7 +38,7 @@ module.exports = function({ carouselSetting, playlist }) {
       <ol class="carousel-indicators">
         ${playlist.map((item, idx) => {
           return yo`
-            <li class="${idx === 0? 'active' : ''}"></li>
+            <li class="${idx === 0? 'active' : ''}" data-target="${selector}" data-slide-to="${idx}"></li>
           `;
         })}
       </ol>
