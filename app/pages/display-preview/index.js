@@ -8,6 +8,7 @@ const EventEmitter = require('events').EventEmitter;
 // components
 const layout = require('../../components/layout');
 const subscriptionsList = require('../../components/subscriptions-list');
+const carousel = require('../../components/carousel');
 
 // routing
 page('/display-preview', () => {
@@ -81,19 +82,33 @@ function setSelectedChannel(channelId) {
 
 // render function
 function displayPreviewPage() {
+  const carouselSetting = {
+    interval: 3000,
+    pause: null
+  };
+
   var html = yo`
     ${layout({
       loggedIn: true,
       children: yo`
-        <div class="container">
+        <div class="container container-display-preview">
           <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
-              <h1>Display Preview Page</h1>
-              ${subscriptionsList({
-                subscriptions: getState().subscriptions,
-                selectedChannel: getState().selectedChannel,
-                onSelectChannel: onSelectChannel
-              })}
+              <div class="row">
+                <div class="col-sm-4">
+                  ${subscriptionsList({
+                    subscriptions: getState().subscriptions,
+                    selectedChannel: getState().selectedChannel,
+                    onSelectChannel: onSelectChannel
+                  })}
+                </div>
+                <div class="col-sm-8">
+                  ${carousel({
+                    carouselSetting: carouselSetting,
+                    playlist: getState().selectedChannel && getState().selectedChannel.contents
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>

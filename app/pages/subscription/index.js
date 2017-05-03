@@ -15,9 +15,8 @@ const inputTypeahead = require('../../components/input-typeahead');
 const store = require('../../shared/store');
 const channelActions = require('../../shared/reducers/channels/actions');
 
-// routing
-page('/subscriptions', () => {
-  const initialState = {
+// initial page state
+const initialState = {
     subscriptions: {
       // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
       // "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
@@ -27,6 +26,9 @@ page('/subscriptions', () => {
     activeTabIndex: 0,
     activeDetailsTab: 'Contents'
   };
+
+// routing
+page('/subscriptions', () => {
   // set initial state
   setInitialState(initialState);
   // append root state to page state

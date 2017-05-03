@@ -67,9 +67,9 @@ function enterTransition() {
 // page renderer
 function displayPage() {
   // inject css
-  require('./index.scss');
+  // require('./index.scss');
 
-  var carouselSetting = {
+  const carouselSetting = {
     interval: 3000,
     pause: null
   };
