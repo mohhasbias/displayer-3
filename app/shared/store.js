@@ -2,10 +2,15 @@
 
 const { createStore, combineReducers } = require('redux');
 
+// cross page reducer
 const channelsReducer = require('./reducers/channels');
 
+// page reducer
+const subscriptionsPageReducer = require('./reducers/subscriptions-page');
+
 const reducer = combineReducers({
-  channels: channelsReducer
+  channels: channelsReducer,
+  subscriptionsPage: subscriptionsPageReducer
 });
 
 var store = createStore(

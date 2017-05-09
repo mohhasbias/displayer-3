@@ -14,59 +14,38 @@ const inputTypeahead = require('../../components/input-typeahead');
 // root state
 const store = require('../../shared/store');
 const channelActions = require('../../shared/reducers/channels/actions');
-
-// initial page state
-const initialState = {
-    subscriptions: {
-      // "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
-      // "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
-    },
-
-    // selectedChannel: require('../../../data/channel-details.json'),
-    activeTabIndex: 0,
-    activeDetailsTab: 'Contents'
-  };
+const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
 
 // routing
 page('/subscriptions', () => {
-  // set initial state
-  setInitialState(initialState);
-  // append root state to page state
-  store.subscribe(() => mapStoreToState(store));
+  // subscribe store updates
+  store.subscribe(() => {
+    // re-render
+    subscriptionPage({
+      mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).data, 
+      newestChannel: channelActions.selectNewestChannels(store.getState()).data, 
+      channels: channelActions.selectChannelList(store.getState()).data, 
+      subscriptions: {},
+      selectedChannel: subscriptionsPageActions.selectSelectedChannel(store.getState()),
+      activeTabIndex: subscriptionsPageActions.selectActiveTabIndex(store.getState()),
+      activeDetailsTab: subscriptionsPageActions.selectActiveDetailsTab(store.getState()),
+      onTabSelect: (index) => {
+        store.dispatch(subscriptionsPageActions.setActiveTabIndex(index))
+      },
+      onItemClick: () => {
+        store.dispatch(subscriptionsPageActions.fetchSelectedChannel(store.dispatch))
+      }
+    });
+  });
   // load required data
   store.dispatch(channelActions.fetchChannelList(store.dispatch));
   store.dispatch(channelActions.fetchChannelMostUploaded(store.dispatch));
   store.dispatch(channelActions.fetchNewestChannels(store.dispatch));
 });
 
-// append store to page state
-function mapStoreToState(store) {
-  setState({
-    channels: channelActions.selectChannelList(store.getState()).items,
-    mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).items,
-    newestChannel: channelActions.selectNewestChannels(store.getState()).items
-  });
-}
-
-// page state tool
-function setInitialState(initialState) {
-  this.state = initialState;
-}
-
-function setState(partialState) {
-  this.state = Object.assign({}, getState(), partialState);
-  // console.log(getState());
-  // re-render page
-  subscriptionPage();
-}
-
-function getState() {
-  return this.state;
-}
-
 // page state helper
 function isSubscribed(channelId) {
-  return getState().subscriptions[channelId]? true: false;
+  return store.getState().subscriptions[channelId]? true: false;
 }
 
 // state modifier
@@ -91,12 +70,6 @@ function setSelectedChannel(channelId) {
 }
 
 // event handler
-function onTabSelect(index) {
-  setState({
-    activeTabIndex: index
-  });
-}
-
 function onTabDetailsSelect(tabName) {
   setState({
     activeDetailsTab: tabName
@@ -137,26 +110,31 @@ function onItemClick() {
 }
 
 function onLogout() {
-  setInitialState(initialState);
   page.redirect('/logout');
 }
 
 // render function
-function subscriptionPage() {
+function subscriptionPage({ 
+  mostUploadedContent, 
+  newestChannel, 
+  channels, 
+  subscriptions,
+  selectedChannel,
+  activeTabIndex,
+  activeDetailsTab,
+  onTabSelect,
+  onItemClick
+}) {
   // inject css
   require('./index.scss');
 
   // data preparation
-  var mostUploadedContent = getState().mostUploadedContent;
   mostUploadedContent = mostUploadedContent.map( channel => {
     return Object.assign({}, channel, {
       total: `${channel.total} contents`
     });
   });
 
-  var newestChannel = getState().newestChannel;
-
-  var channels = getState().channels;
   channels = channels.map(channel => {
     return Object.assign({}, channel, {
       name: channel.channelName
@@ -171,8 +149,8 @@ function subscriptionPage() {
       className: 'subscriptions-page',
       children: yo`
         <div class="container container-subscriptions">
-          ${(!Object.keys(getState().subscriptions).length || '') &&
-            (!getState().selectedChannel || '') && 
+          ${(!Object.keys(subscriptions).length || '') &&
+            (!selectedChannel || '') && 
             yo`
               <div class="row">
                 <div class="col-sm-10 col-sm-offset-1">
@@ -181,7 +159,7 @@ function subscriptionPage() {
                     channels: channels,
                     labels: [ 'MOST UPLOADED CONTENT', 'NEWEST CHANNEL' ],
                     data: [ mostUploadedContent, newestChannel ],
-                    activeTabIndex: getState().activeTabIndex,
+                    activeTabIndex: activeTabIndex,
                     onTabSelect: onTabSelect,
                     onItemClick: onItemClick
                   })}
@@ -189,19 +167,19 @@ function subscriptionPage() {
               </div>
             `}
           <div class="row">
-            ${(Object.keys(getState().subscriptions).length || '') &&
+            ${(Object.keys(subscriptions).length || '') &&
               yo`
                 <div class="col-sm-3 col-sm-offset-1">
                   ${subscriptionsList({
-                    subscriptions: getState().subscriptions,
-                    selectedChannel: getState().selectedChannel,
+                    subscriptions: subscriptions,
+                    selectedChannel: selectedChannel,
                     onSelectChannel: setSelectedChannel
                   })}
                 </div>
               `
             }
-            <div class="${Object.keys(getState().subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
-              ${(getState().selectedChannel || Object.keys(getState().subscriptions).length || '') &&
+            <div class="${Object.keys(subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
+              ${(selectedChannel || Object.keys(subscriptions).length || '') &&
                 yo`
                   <form class="search-form">
                     <div class="row">
@@ -215,28 +193,28 @@ function subscriptionPage() {
                   </form>
                 `
               }
-              ${(getState().selectedChannel || '') &&
+              ${(selectedChannel || '') &&
                 yo`
                   <div>
                     <div class="media">
                       <div class="media-left">
                         <a href="javascript:;">
-                          <img class="media-object" src="${getState().selectedChannel.channelLogo}" alt="logo hima mmb">
+                          <img class="media-object" src="${selectedChannel.channelLogo}" alt="logo hima mmb">
                         </a>
                       </div>
                       <div class="media-body">
-                        <h1 class="media-heading">${getState().selectedChannel.channelName}</h1>
-                        <p class="text-muted">${`${getState().selectedChannel.contents.length} contents`}</p>
+                        <h1 class="media-heading">${selectedChannel.channelName}</h1>
+                        <p class="text-muted">${`${selectedChannel.contents.length} contents`}</p>
                       </div>
                       <div class="media-right">
-                        ${(getState().selectedChannel.subscribed || '') &&
+                        ${(selectedChannel.subscribed || '') &&
                           yo`
                             <button class="btn btn-danger" onclick=${onToggleSubscribe} >
                               unsubscribe
                             </button>
                           `
                         }
-                        ${(!getState().selectedChannel.subscribed || '') &&
+                        ${(!selectedChannel.subscribed || '') &&
                           yo`
                           <button class="btn btn-success" onclick=${onToggleSubscribe} >
                             + subscribe
@@ -246,10 +224,10 @@ function subscriptionPage() {
                       </div>
                     </div>
                     ${navTabDetails({
-                      channel: getState().selectedChannel,
-                      activeTab: getState().activeDetailsTab,
+                      channel: selectedChannel,
+                      activeTab: activeDetailsTab,
                       onTabSelect: onTabDetailsSelect,
-                      colSize: Object.keys(getState().subscriptions).length? 'col-sm-4' : 'col-sm-2'
+                      colSize: Object.keys(subscriptions).length? 'col-sm-4' : 'col-sm-2'
                     })}
                   </div>
                 `
