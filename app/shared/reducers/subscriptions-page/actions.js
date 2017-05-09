@@ -1,4 +1,4 @@
-/* global module */
+/* global require, module */
 
 const SET_SELECTED_CHANNEL = 'SET_SELECTED_CHANNEL';
 
@@ -6,7 +6,23 @@ function selectSelectedChannel(state) {
   return state.subscriptionsPage.selectedChannel;
 }
 
-function setSelectedChannel(channelDetails) {
+function setSelectedChannel(channelId) {
+  console.log(channelId);
+  var channelDetails = {};
+  switch(channelId) {
+    case 'eWRhpRV':
+      channelDetails = require('../../../../data/channel-details-eWRhpRV.json');
+      break;
+    case '23TplPdS':
+      channelDetails = require('../../../../data/channel-details-23TplPdS.json');
+      break;
+    case '46Juzcyx':
+      channelDetails = require('../../../../data/channel-details-46Juzcyx.json');
+      break;
+    default:
+      channelDetails = require('../../../../data/channel-details-eWRhpRV.json');
+  }
+
   return {
     type: SET_SELECTED_CHANNEL,
     payload: channelDetails

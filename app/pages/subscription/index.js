@@ -32,8 +32,10 @@ page('/subscriptions', () => {
       onTabSelect: (index) => {
         store.dispatch(subscriptionsPageActions.setActiveTabIndex(index))
       },
-      onItemClick: () => {
-        store.dispatch(subscriptionsPageActions.fetchSelectedChannel(store.dispatch))
+      onItemClick: (channelId) => {
+        // var channelId = 'eWRhpRV';
+        console.log(channelId);
+        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelId))
       }
     });
   });
@@ -159,6 +161,7 @@ function subscriptionPage({
                     channels: channels,
                     labels: [ 'MOST UPLOADED CONTENT', 'NEWEST CHANNEL' ],
                     data: [ mostUploadedContent, newestChannel ],
+                    columns: [ ['channelName', 'total'], ['channelName', 'timeago'] ],
                     activeTabIndex: activeTabIndex,
                     onTabSelect: onTabSelect,
                     onItemClick: onItemClick

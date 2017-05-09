@@ -7,7 +7,7 @@ const navTabData = require('../nav-tab-data');
 const inputTypeahead = require('../input-typeahead');
 
 // renderer
-module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
+module.exports = function({ channels, labels, data, columns, activeTabIndex, onTabSelect, onSearchInputChange, onItemClick }) {
   return yo`
     <div class="first-subscriptions">
       <p class="text-center"><strong>YOU HAVEN'T SUBSCRIBE ANY CHANNEL YET</strong></p>
@@ -25,6 +25,7 @@ module.exports = function({ channels, labels, data, activeTabIndex, onTabSelect,
           ${navTabData({
             labels:labels,
             data: data,
+            columns: columns,
             activeTabIndex: activeTabIndex,
             onTabSelect: onTabSelect,
             onItemClick: onItemClick

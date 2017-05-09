@@ -1,9 +1,11 @@
 /* global require, module */
 
 const yo = require('yo-yo');
+const shortid = require('shortid');
+const $ = require('jquery');
 
 // render function
-module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemClick }) {
+module.exports = function({ labels, data, columns, activeTabIndex, onTabSelect, onItemClick }) {
   // inject css
   require('./index.scss');
 
@@ -22,13 +24,30 @@ module.exports = function({ labels, data, activeTabIndex, onTabSelect, onItemCli
       </ul>
       <table class="table table-hover table-data">
         <tbody>
-          ${data[activeTabIndex].map(d => {
+          ${data[activeTabIndex] && data[activeTabIndex].map(d => {
             return yo`
               <tr>
-                ${Object.keys(d).map((key) => {
+                ${columns[activeTabIndex].map(column => {
+                  const linkId = shortid.generate();
+                  const linkSelector = `#${linkId}`;
+
+                  // append onclick through jquery, because diffhtml doesn't make it
+                  $(linkSelector).ready(() => {
+                    $(linkSelector).off('click');
+                    $(linkSelector).on('click', () => {
+                      onItemClick(d.id);
+                    });
+                  });
+
                   return yo`
                     <td>
-                      <a href="javascript:;" class="link-unstyled" onclick=${onItemClick} >${d[key]}</a>
+                      <a           
+                        id="${linkId}"             
+                        href="javascript:;" 
+                        class="link-unstyled" 
+                      >
+                        ${d[column]}
+                      </a>
                     </td>
                   `;
                 })}
