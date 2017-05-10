@@ -38,10 +38,15 @@
     font-weight: 700;
   }
 
+  .table-data>tbody>tr>td {
+    padding: 0;
+  }
+
   .link-unstyled {
     text-decoration: none;
     color: inherit;
     background: inherit;
     display: block;
+    padding: 8px;
   }
 }

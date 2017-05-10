@@ -17,6 +17,10 @@ module.exports = function(state = initialState, action) {
       return Object.assign({}, state, {
         activeTabIndex: action.payload
       });
+    case ACTIONS.SET_ACTIVE_DETAILS_TAB:
+      return Object.assign({}, state, {
+        activeDetailsTab: action.payload
+      });
     default:
       return state;
   }

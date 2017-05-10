@@ -22,70 +22,70 @@ function selectNewestChannels(rootState) {
   return rootState.channels[ORDER_DATE_CREATED];
 }
 
-function fetchChannelList(dispatch) {
-  // side effects
-  fetchChannels(ORDER_NONE, dispatch, receiveChannelList);
-
+function requestChannel(order) {
   return {
     type: FETCH_CHANNELS,
     payload: {
-      order: ORDER_NONE
+      order
     }
   };
+}
+
+function receiveChannel(order, data) {
+  return {
+    type: RECEIVE_CHANNELS,
+    payload: {
+      order,
+      data
+    }
+  };
+}
+
+function failFetchChannel(order, error) {
+  return {
+    type: FAIL_FETCH_CHANNELS,
+    payload: {
+      order,
+      error
+    }
+  };
+}
+
+function requestChannelList() {
+  return requestChannel(ORDER_NONE);
 }
 
 function receiveChannelList(data) {
-  return {
-    type: RECEIVE_CHANNELS,
-    payload: {
-      order: ORDER_NONE,
-      data
-    }
-  };
+  return receiveChannel(ORDER_NONE, data);
 }
 
-function fetchChannelMostUploaded(dispatch) {
-  // side effects
-  fetchChannels(ORDER_TOTAL, dispatch, receiveChannelMostUploaded);
+function failFetchChannelList(error) {
+  return failFetchChannel(ORDER_NONE, error);
+}
 
-  return {
-    type: FETCH_CHANNELS,
-    payload: {
-      order: ORDER_TOTAL
-    }
-  };
+function requestChannelMostUploaded() {
+  return requestChannel(ORDER_TOTAL);
 }
 
 function receiveChannelMostUploaded(data) {
-  return {
-    type: RECEIVE_CHANNELS,
-    payload: {
-      order: ORDER_TOTAL,
-      data
-    }
-  };
+  return receiveChannel(ORDER_TOTAL, data);
 }
 
-function fetchNewestChannels(dispatch) {
-  // side effects
-  fetchChannels(ORDER_DATE_CREATED, dispatch, receiveNewestChannels);
 
-  return {
-    type: FETCH_CHANNELS,
-    payload: {
-      order: ORDER_DATE_CREATED
-    }
-  };
+function failFetchChannelMostUploaded(error) {
+  return failFetchChannel(ORDER_TOTAL, error);
+}
+
+function requestNewestChannels() {
+  return requestChannel(ORDER_DATE_CREATED);
 }
 
 function receiveNewestChannels(data) {
-  return {
-    type: RECEIVE_CHANNELS,
-    payload: {
-      order: ORDER_DATE_CREATED,
-      data
-    }
-  };
+  return receiveChannel(ORDER_DATE_CREATED, data);
+}
+
+function failFetchNewestChannels(error) {
+  return failFetchChannel(ORDER_DATE_CREATED, error);
 }
 
 module.exports = {
@@ -97,28 +97,18 @@ module.exports = {
   ORDER_DATE_CREATED,
   ORDER_NONE,
 
-  fetchChannelList,
+  requestChannelList,
   receiveChannelList,
+  failFetchChannelList,
   selectChannelList,
 
-  fetchChannelMostUploaded,
+  requestChannelMostUploaded,
   receiveChannelMostUploaded,
+  failFetchChannelMostUploaded,
   selectChannelMostUploaded,
 
-  fetchNewestChannels,
+  requestNewestChannels,
   receiveNewestChannels,
+  failFetchNewestChannels,
   selectNewestChannels
 };
-
-////////////////////////////////////////
-function fetchChannels(order, dispatch, receiveAction) {
-  const fetchURL = {
-    [ORDER_NONE]: '/data/channels.json',
-    [ORDER_TOTAL]: '/data/most-uploaded-channels.json',
-    [ORDER_DATE_CREATED]: '/data/newest-channels.json'
-  };
-
-  fetch(fetchURL[order])
-    .then(res => res.json())
-    .then(json => dispatch(receiveAction(json)));
-}

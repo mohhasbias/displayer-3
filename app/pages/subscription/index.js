@@ -14,6 +14,7 @@ const inputTypeahead = require('../../components/input-typeahead');
 // root state
 const store = require('../../shared/store');
 const channelActions = require('../../shared/reducers/channels/actions');
+const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
 
 // routing
@@ -30,19 +31,23 @@ page('/subscriptions', () => {
       activeTabIndex: subscriptionsPageActions.selectActiveTabIndex(store.getState()),
       activeDetailsTab: subscriptionsPageActions.selectActiveDetailsTab(store.getState()),
       onTabSelect: (index) => {
-        store.dispatch(subscriptionsPageActions.setActiveTabIndex(index))
+        store.dispatch(subscriptionsPageActions.setActiveTabIndex(index));
       },
       onItemClick: (channelId) => {
-        // var channelId = 'eWRhpRV';
-        console.log(channelId);
-        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelId))
+        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelId));
+      },
+      onSearchInputChange: (channel) => {
+        store.dispatch(subscriptionsPageActions.setSelectedChannel(channel.id));
+      },
+      onTabDetailsSelect: (tabName) => {
+        store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
       }
     });
   });
   // load required data
-  store.dispatch(channelActions.fetchChannelList(store.dispatch));
-  store.dispatch(channelActions.fetchChannelMostUploaded(store.dispatch));
-  store.dispatch(channelActions.fetchNewestChannels(store.dispatch));
+  store.dispatch(channelEffects.fetchChannelList(store.dispatch));
+  store.dispatch(channelEffects.fetchChannelMostUploaded(store.dispatch));
+  store.dispatch(channelEffects.fetchNewestChannels(store.dispatch));
 });
 
 // page state helper
@@ -78,12 +83,6 @@ function onTabDetailsSelect(tabName) {
   });
 }
 
-function onSearchInputChange(channel) {
-  if(channel && channel.id) {
-    setSelectedChannel(channel.id);
-  }
-}
-
 function onToggleSubscribe() {
   setState({
     selectedChannel: Object.assign({}, getState().selectedChannel, {
@@ -105,12 +104,6 @@ function onToggleSubscribe() {
   }
 }
 
-function onItemClick() {
-  setState({
-    selectedChannel: require('../../../data/channel-details.json')
-  });
-}
-
 function onLogout() {
   page.redirect('/logout');
 }
@@ -125,7 +118,9 @@ function subscriptionPage({
   activeTabIndex,
   activeDetailsTab,
   onTabSelect,
-  onItemClick
+  onItemClick,
+  onSearchInputChange,
+  onTabDetailsSelect
 }) {
   // inject css
   require('./index.scss');

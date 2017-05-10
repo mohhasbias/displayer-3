@@ -42,8 +42,17 @@ function setActiveTabIndex(index) {
   };
 }
 
+const SET_ACTIVE_DETAILS_TAB = 'SET_ACTIVE_DETAILS_TAB';
+
 function selectActiveDetailsTab(state) {
   return state.subscriptionsPage.activeDetailsTab;
+}
+
+function setActiveDetailsTab(tabName) {
+  return {
+    type: SET_ACTIVE_DETAILS_TAB,
+    payload: tabName
+  }
 }
 
 module.exports = {
@@ -55,5 +64,7 @@ module.exports = {
   selectActiveTabIndex,
   setActiveTabIndex,
 
-  selectActiveDetailsTab
+  SET_ACTIVE_DETAILS_TAB,
+  selectActiveDetailsTab,
+  setActiveDetailsTab
 };
