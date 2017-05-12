@@ -16,6 +16,7 @@ const store = require('../../shared/store');
 const channelActions = require('../../shared/reducers/channels/actions');
 const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
+const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
 
 // routing
 page('/subscriptions', () => {
@@ -48,6 +49,7 @@ page('/subscriptions', () => {
   store.dispatch(channelEffects.fetchChannelList(store.dispatch));
   store.dispatch(channelEffects.fetchChannelMostUploaded(store.dispatch));
   store.dispatch(channelEffects.fetchNewestChannels(store.dispatch));
+  store.dispatch(subscriptionsEffects.fetchSubscriptions('userid', store.dispatch));
 });
 
 // page state helper

@@ -23,7 +23,7 @@ module.exports = function(state = initialFetchResult, action) {
       return Object.assign({}, state, {
         isFetching: false,
         error: true,
-        data: action.payload.data
+        data: action.payload.error
       });
     default:
       return state;

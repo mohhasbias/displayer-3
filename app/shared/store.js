@@ -2,15 +2,16 @@
 
 const { createStore, combineReducers } = require('redux');
 
-// cross page reducer
+// list of reducers
 const channelsReducer = require('./reducers/channels');
-
-// page reducer
 const subscriptionsPageReducer = require('./reducers/subscriptions-page');
+const subscriptionsReducer = require('./reducers/subscriptions');
 
+// app combined reducer
 const reducer = combineReducers({
   channels: channelsReducer,
-  subscriptionsPage: subscriptionsPageReducer
+  subscriptionsPage: subscriptionsPageReducer,
+  subscriptions: subscriptionsReducer
 });
 
 var store = createStore(
@@ -18,4 +19,11 @@ var store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-module.exports = store;
+// selectors
+function selectSubscriptions(state) {
+  return state.subscriptions;
+}
+
+module.exports = Object.assign({}, store, {
+  selectSubscriptions
+});

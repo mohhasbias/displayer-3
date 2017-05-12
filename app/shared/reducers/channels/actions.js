@@ -1,4 +1,4 @@
-/* global require, module */
+/* global module */
 
 const FETCH_CHANNELS = 'FETCH_CHANNELS';
 const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';

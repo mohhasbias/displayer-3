@@ -1,3 +1,10 @@
 {
-  "CHANNEL_LIST_URL": "http://hasbi.lecturer.pens.ac.id/perdis/backend-2/channels"
+  "BACKEND_BASE_URL": "http://hasbi.lecturer.pens.ac.id/perdis/backend-2",
+  "CHANNEL_LIST_URI": "/channels",
+  "CHANNEL_MOST_UPLOADED_URI": "/channels?order=\"total\"",
+  "NEWEST_CHANNEL_URI": "/channels?order=\"date\"",
+  "SUBSCRIBE_URI": "/subscribe",
+  "UNSUBSCRIBE_URI": "/unsubscribe",
+  "HIDE_CHANNEL_URI": "/hide-channel",
+  "SHOW_CHANNEL_URI": "/show-channel"
 }

@@ -11,7 +11,7 @@ const ORDER_BY_DATE_CREATED = 'ORDER_BY_DATE_CREATED';
 
 function fetchChannels(order, onSuccess, onFailure) {
   const fetchURL = {
-    [ORDER_NONE]: config.CHANNEL_LIST_URL,
+    [ORDER_NONE]: config.BACKEND_BASE_URL + config.CHANNEL_LIST_URI,
     [ORDER_BY_TOTAL]: '/data/most-uploaded-channels.json',
     [ORDER_BY_DATE_CREATED]: '/data/newest-channels.json'
   };
