@@ -1,6 +1,4 @@
 /* global require, module */
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
 
 const FETCH_CHANNELS = 'FETCH_CHANNELS';
 const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';

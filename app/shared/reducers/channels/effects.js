@@ -1,14 +1,14 @@
 /* global require, module */
 
 const ACTIONS = require('./actions');
+const channelAPI = require('../../api/channels');
 
 function fetchChannelList(dispatch) {
   // side effects
-  fetchChannels(
-    ACTIONS.ORDER_NONE, 
-    dispatch, 
-    ACTIONS.receiveChannelList,
-    ACTIONS.failFetchChannelList
+  channelAPI.fetchChannels(
+    channelAPI.ORDER_NONE,
+    (json) => dispatch(ACTIONS.receiveChannelList(json)),
+    (err) => dispatch(ACTIONS.failFetchChannelList(err))
   );
 
   return ACTIONS.requestChannelList();
@@ -16,11 +16,10 @@ function fetchChannelList(dispatch) {
 
 function fetchChannelMostUploaded(dispatch) {
   // side effects
-  fetchChannels(
-    ACTIONS.ORDER_TOTAL, 
-    dispatch, 
-    ACTIONS.receiveChannelMostUploaded,
-    ACTIONS.failFetchChannelMostUploaded
+  channelAPI.fetchChannels(
+    channelAPI.ORDER_BY_TOTAL,
+    (json) => dispatch(ACTIONS.receiveChannelMostUploaded(json)),
+    (err) => dispatch(ACTIONS.failFetchChannelMostUploaded(err))
   );
 
   return ACTIONS.requestChannelMostUploaded();
@@ -28,11 +27,11 @@ function fetchChannelMostUploaded(dispatch) {
 
 function fetchNewestChannels(dispatch) {
   // side effects
-  fetchChannels(
-    ACTIONS.ORDER_DATE_CREATED, 
-    dispatch, 
-    ACTIONS.receiveNewestChannels,
-    ACTIONS.failFetchNewestChannels);
+  channelAPI.fetchChannels(
+    channelAPI.ORDER_BY_DATE_CREATED,
+    (json) => dispatch(ACTIONS.receiveNewestChannels(json)),
+    (err) => dispatch(ACTIONS.failFetchNewestChannels(err))
+  );
 
   return ACTIONS.requestNewestChannels();
 }
@@ -42,17 +41,3 @@ module.exports = {
   fetchNewestChannels,
   fetchChannelMostUploaded
 };
-
-////////////////////////////////////////
-function fetchChannels(order, dispatch, receiveAction, failAction) {
-  const fetchURL = {
-    [ACTIONS.ORDER_NONE]: '/data/channels.json',
-    [ACTIONS.ORDER_TOTAL]: '/data/most-uploaded-channels.json',
-    [ACTIONS.ORDER_DATE_CREATED]: '/data/newest-channels.json'
-  };
-
-  fetch(fetchURL[order])
-    .then(res => res.json())
-    .then(json => dispatch(receiveAction(json)))
-    .catch(err => dispatch(failAction(err)));
-}
