@@ -30,7 +30,7 @@ page('/subscriptions', () => {
       newestChannel: selectors.selectNewestChannels(store.getState()).data, 
       channels: selectors.selectChannelList(store.getState()).data, 
       subscriptions: selectors.selectSubscriptions(store.getState()),
-      selectedChannel: selectors.selectSelectedChannel(store.getState()),
+      selectedChannel: selectors.selectSelectedChannelWithSubscribeStatus(store.getState()),
       activeTabIndex: selectors.selectActiveTabIndex(store.getState()),
       activeDetailsTab: selectors.selectActiveDetailsTab(store.getState()),
       onTabSelect: (index) => {
