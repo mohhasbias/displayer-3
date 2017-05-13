@@ -6,6 +6,8 @@ const $ = require('jquery');
 const page = require('page');
 const keycodes = require('keycode-js');
 
+const carousel = require('../../components/carousel');
+
 // load jquery plugin
 require('bootstrap');
 
@@ -75,28 +77,39 @@ function displayPage() {
   };
 
   // render template
-  var html = yo`
-    <div class="display-page carousel slide" data-ride="carousel" data-interval="${carouselSetting.interval}" data-pause="${carouselSetting.pause}">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li class="active"></li>
-        <li></li>
-        <li></li>
-      </ol>
+  // var html = yo`
+  //   <div class="display-page carousel slide" data-ride="carousel" data-interval="${carouselSetting.interval}" data-pause="${carouselSetting.pause}">
+  //     <!-- Indicators -->
+  //     <ol class="carousel-indicators">
+  //       <li class="active"></li>
+  //       <li></li>
+  //       <li></li>
+  //     </ol>
 
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="assets/i/walrus.jpeg" alt="walrus">
-        </div>
-        <div class="item">
-          <img src="assets/i/strawberry.jpeg" alt="strawberry">
-        </div>
-        <div class="item">
-          <img src="assets/i/lion.jpeg" alt="lion">
-        </div>
-      </div>
-    </div>
+  //     <!-- Wrapper for slides -->
+  //     <div class="carousel-inner" role="listbox">
+  //       <div class="item active">
+  //         <img src="assets/i/walrus.jpeg" alt="walrus">
+  //       </div>
+  //       <div class="item">
+  //         <img src="assets/i/strawberry.jpeg" alt="strawberry">
+  //       </div>
+  //       <div class="item">
+  //         <img src="assets/i/lion.jpeg" alt="lion">
+  //       </div>
+  //     </div>
+  //   </div>
+  // `;
+
+  var selectedChannel = {
+    data: null
+  };
+
+  var html = yo`
+    ${carousel({
+      carouselSetting: carouselSetting,
+      playlist: selectedChannel.data && selectedChannel.data.contents
+    })}
   `;
 
   // render to DOM

@@ -10,14 +10,17 @@ const mime = require('browserify-mime');
 require('bootstrap');
 
 const defaultPlaylist = [
+  // {
+  //   url: 'assets/i/walrus.jpeg'
+  // },
+  // {
+  //   url: 'assets/i/strawberry.jpeg'
+  // },
+  // {
+  //   url: 'assets/i/lion.jpeg'
+  // }
   {
-    url: 'assets/i/walrus.jpeg'
-  },
-  {
-    url: 'assets/i/strawberry.jpeg'
-  },
-  {
-    url: 'assets/i/lion.jpeg'
+    url: 'assets/video/OPD.mp4'
   }
 ];
 
@@ -31,6 +34,8 @@ module.exports = function({ carouselSetting, playlist }) {
   });
 
   playlist = playlist || defaultPlaylist;
+
+  require('./index.scss');
 
   return yo`
     <div id="${refId}" class="carousel slide" data-ride="carousel" data-interval="${carouselSetting.interval}" data-pause="${carouselSetting.pause}">
@@ -52,6 +57,13 @@ module.exports = function({ carouselSetting, playlist }) {
             case 'image/png':
               el = yo`
                 <img src="${item.url}" alt="${basename(item.url)}">
+              `;
+              break;
+            case 'video/mp4':
+              el = yo`
+                <div class="embed-responsive embed-responsive-16by9">
+                  <video class="embed-responsive-item" src="${item.url}" autoplay loop>
+                </div>
               `;
               break;
             default:

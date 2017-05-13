@@ -2,10 +2,10 @@
 
 const page = require('page');
 
-// attach pages
+// attach pages, each contain route
 require('./pages/display');
 require('./pages/login');
-require('./pages/subscription');
+require('./pages/subscriptions');
 require('./pages/display-preview');
 require('./pages/logout');
 

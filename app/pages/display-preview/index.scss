@@ -6,18 +6,4 @@
     box-shadow: 4px 4px 20px 5px rgba(0, 0, 0, 0.33);
     border: solid 10px #333;
   }
-  
-  .tv-placeholder .carousel {
-    height: 100%;
-  }
-  
-  .tv-placeholder .carousel-inner,
-  .tv-placeholder .carousel-inner .item, 
-  .tv-placeholder .carousel-inner .item img {
-    height: inherit;
-  }
-
-  .tv-placeholder .carousel-inner .item img {
-    margin: auto;
-  }
 }

@@ -1,8 +1,7 @@
-/* global require, module */
-
-var diffhtml = require('diffhtml');
-var yo = require('yo-yo');
-var page = require('page');
+/* global require */
+const diffhtml = require('diffhtml');
+const yo = require('yo-yo');
+const page = require('page');
 
 // components
 const layout = require('../../components/layout');
@@ -11,12 +10,12 @@ const navTabDetails = require('../../components/nav-tab-details');
 const subscriptionsList = require('../../components/subscriptions-list');
 const inputTypeahead = require('../../components/input-typeahead');
 
-// root state
+// app state
 const store = require('../../shared/store');
 const selectors = require('../../shared/selectors');
 
-const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
+const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageEffects = require('../../shared/reducers/subscriptions-page/effects');
 const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
 
@@ -25,42 +24,7 @@ page('/subscriptions', () => {
   // subscribe store updates
   store.subscribe(() => {
     // re-render
-    subscriptionPage({
-      mostUploadedContent: selectors.selectChannelMostUploaded(store.getState()).data, 
-      newestChannel: selectors.selectNewestChannels(store.getState()).data, 
-      channels: selectors.selectChannelList(store.getState()).data, 
-      subscriptions: selectors.selectSubscriptions(store.getState()),
-      selectedChannel: selectors.selectSelectedChannelWithSubscribeStatus(store.getState()),
-      activeTabIndex: selectors.selectActiveTabIndex(store.getState()),
-      activeDetailsTab: selectors.selectActiveDetailsTab(store.getState()),
-      onTabSelect: (index) => {
-        store.dispatch(subscriptionsPageActions.setActiveTabIndex(index));
-      },
-      onItemClick: (channelId) => {
-        subscriptionsPageEffects.fetchSelectedChannel(channelId)(store.dispatch);
-      },
-      onSearchInputChange: (channel) => {
-        if(channel) {
-          subscriptionsPageEffects.fetchSelectedChannel(channel.id)(store.dispatch);
-        }
-      },
-      onTabDetailsSelect: (tabName) => {
-        store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
-      },
-      onSelectChannel: (channelId) => {
-        var channelDetails = selectors.selectSubscriptions(store.getState()).data[channelId];
-        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelDetails));
-      },
-      onToggleSubscribe: () => {
-        var selectedChannel = selectors.selectSelectedChannelWithSubscribeStatus(store.getState()).data;
-        var channelId = selectedChannel.id;
-        if(selectedChannel.subscribed) {
-          subscriptionsEffects.unsubscribeFrom('userid', channelId)(store.dispatch);
-        } else {
-          subscriptionsEffects.subscribeTo('userid', channelId)(store.dispatch);
-        }
-      }
-    });
+    subscriptionPage(mapStoreToPage());
   });
   // load required data
   // handover dispatch to effects
@@ -70,8 +34,48 @@ page('/subscriptions', () => {
   subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
 });
 
-function onLogout() {
-  page.redirect('/logout');
+// store mapper
+function mapStoreToPage() {
+  return {
+    mostUploadedContent: selectors.selectChannelMostUploaded(store.getState()).data, 
+    newestChannel: selectors.selectNewestChannels(store.getState()).data, 
+    channels: selectors.selectChannelList(store.getState()).data, 
+    subscriptions: selectors.selectSubscriptions(store.getState()),
+    selectedChannel: selectors.selectSelectedChannelWithSubscribeStatus(store.getState()),
+    activeTabIndex: selectors.selectActiveTabIndex(store.getState()),
+    activeDetailsTab: selectors.selectActiveDetailsTab(store.getState()),
+    onTabSelect: (index) => {
+      store.dispatch(subscriptionsPageActions.setActiveTabIndex(index));
+    },
+    onItemClick: (channelId) => {
+      subscriptionsPageEffects.fetchSelectedChannel(channelId)(store.dispatch);
+    },
+    onSearchInputChange: (channel) => {
+      if(channel) {
+        subscriptionsPageEffects.fetchSelectedChannel(channel.id)(store.dispatch);
+      }
+    },
+    onTabDetailsSelect: (tabName) => {
+      store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
+    },
+    onSelectChannel: (channelId) => {
+      var channelDetails = selectors.selectSubscriptions(store.getState()).data[channelId];
+      store.dispatch(subscriptionsPageActions.setSelectedChannel(channelDetails));
+    },
+    onToggleSubscribe: () => {
+      var selectedChannel = selectors.selectSelectedChannelWithSubscribeStatus(store.getState()).data;
+      var channelId = selectedChannel.id;
+      if(selectedChannel.subscribed) {
+        subscriptionsEffects.unsubscribeFrom('userid', channelId)(store.dispatch);
+      } else {
+        subscriptionsEffects.subscribeTo('userid', channelId)(store.dispatch);
+      }
+    },
+    onLogout: () => {
+      console.log('logout');
+      page.redirect('/logout');
+    }
+  };
 }
 
 // render function
@@ -88,7 +92,8 @@ function subscriptionPage({
   onSearchInputChange,
   onTabDetailsSelect,
   onSelectChannel,
-  onToggleSubscribe
+  onToggleSubscribe,
+  onLogout
 }) {
   // inject css
   require('./index.scss');
@@ -209,5 +214,3 @@ function subscriptionPage({
   // render to DOM
   diffhtml.innerHTML(document.getElementById('app'), html);
 }
-
-module.exports = subscriptionPage;

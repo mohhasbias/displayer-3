@@ -9,22 +9,40 @@ const layout = require('../../components/layout');
 const subscriptionsList = require('../../components/subscriptions-list');
 const carousel = require('../../components/carousel');
 
+// app store
+const store = require('../../shared/store');
+const selectors = require('../../shared/selectors');
+
+const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
+
 // routing
 page('/display-preview', () => {
-  const initialState = {
-    subscriptions: {
-      "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
-      "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
-    },
-    selectedChannel: require('../../../data/channel-details-23TplPdS.json')
-  };
+  store.subscribe(() => {
+    displayPreviewPage(mapStoreToPage());
+  });
 
-  setInitialState(initialState);
+  subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
+  // const initialState = {
+  //   subscriptions: {
+  //     "eWRhpRV": require('../../../data/channel-details-eWRhpRV.json'),
+  //     "23TplPdS": require('../../../data/channel-details-23TplPdS.json')
+  //   },
+  //   selectedChannel: require('../../../data/channel-details-23TplPdS.json')
+  // };
 
-  subscribeToStateChange(displayPreviewPage);
+  // setInitialState(initialState);
 
-  displayPreviewPage();
+  // subscribeToStateChange(displayPreviewPage);
+
+  // displayPreviewPage();
 });
+
+function mapStoreToPage() {
+  return {
+    subscriptions: selectors.selectSubscriptions(store.getState()),
+    selectedChannel: selectors.selectSelectedChannel(store.getState())
+  };
+}
 
 // page state
 function setInitialState(initialState) {
@@ -81,7 +99,10 @@ function setSelectedChannel(channelId) {
 }
 
 // render function
-function displayPreviewPage() {
+function displayPreviewPage({
+  subscriptions,
+  selectedChannel
+}) {
   const carouselSetting = {
     interval: 3000,
     pause: null
@@ -97,8 +118,8 @@ function displayPreviewPage() {
           <div class="row">
             <div class="col-sm-3 col-sm-offset-1">
               ${subscriptionsList({
-                subscriptions: getState().subscriptions,
-                selectedChannel: getState().selectedChannel,
+                subscriptions: subscriptions.data,
+                selectedChannel: selectedChannel.data,
                 onSelectChannel: onSelectChannel
               })}
             </div>
@@ -106,7 +127,7 @@ function displayPreviewPage() {
               <div class="tv-placeholder">
                 ${carousel({
                   carouselSetting: carouselSetting,
-                  playlist: getState().selectedChannel && getState().selectedChannel.contents
+                  playlist: selectedChannel.data && selectedChannel.data.contents
                 })}
               </div>
             </div>
