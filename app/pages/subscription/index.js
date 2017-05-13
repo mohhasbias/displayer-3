@@ -13,7 +13,8 @@ const inputTypeahead = require('../../components/input-typeahead');
 
 // root state
 const store = require('../../shared/store');
-const channelActions = require('../../shared/reducers/channels/actions');
+const selectors = require('../../shared/selectors');
+
 const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
 const subscriptionsPageEffects = require('../../shared/reducers/subscriptions-page/effects');
@@ -25,13 +26,13 @@ page('/subscriptions', () => {
   store.subscribe(() => {
     // re-render
     subscriptionPage({
-      mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).data, 
-      newestChannel: channelActions.selectNewestChannels(store.getState()).data, 
-      channels: channelActions.selectChannelList(store.getState()).data, 
-      subscriptions: store.selectSubscriptions(),
-      selectedChannel: store.selectSelectedChannel().error? null : store.selectSelectedChannel().data,
-      activeTabIndex: subscriptionsPageActions.selectActiveTabIndex(store.getState()),
-      activeDetailsTab: subscriptionsPageActions.selectActiveDetailsTab(store.getState()),
+      mostUploadedContent: selectors.selectChannelMostUploaded(store.getState()).data, 
+      newestChannel: selectors.selectNewestChannels(store.getState()).data, 
+      channels: selectors.selectChannelList(store.getState()).data, 
+      subscriptions: selectors.selectSubscriptions(store.getState()),
+      selectedChannel: selectors.selectSelectedChannel(store.getState()),
+      activeTabIndex: selectors.selectActiveTabIndex(store.getState()),
+      activeDetailsTab: selectors.selectActiveDetailsTab(store.getState()),
       onTabSelect: (index) => {
         store.dispatch(subscriptionsPageActions.setActiveTabIndex(index));
       },
@@ -47,10 +48,11 @@ page('/subscriptions', () => {
         store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
       },
       onSelectChannel: (channelId) => {
-        // console.log(channelId);
-        var channelDetails = store.selectSubscriptions().data[channelId];
-        // console.log(channelDetails);
+        var channelDetails = selectors.selectSubscriptions(store.getState()).data[channelId];
         store.dispatch(subscriptionsPageActions.setSelectedChannel(channelDetails));
+      },
+      onToggleSubscribe: () => {
+        console.log('toggle subscribe: ' + selectors.selectSelectedChannel(store.getState()).data.id);
       }
     });
   });
@@ -61,55 +63,6 @@ page('/subscriptions', () => {
   channelEffects.fetchNewestChannels()(store.dispatch);
   subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
 });
-
-// page state helper
-function isSubscribed(channelId) {
-  return store.getState().subscriptions[channelId]? true: false;
-}
-
-// state modifier
-function setSelectedChannel(channelId) {
-  var channelDetails = {};
-  switch(channelId) {
-    case 'eWRhpRV':
-      channelDetails = require('../../../data/channel-details-eWRhpRV.json');
-      break;
-    case '23TplPdS':
-      channelDetails = require('../../../data/channel-details-23TplPdS.json');
-      break;
-    case '46Juzcyx':
-      channelDetails = require('../../../data/channel-details-46Juzcyx.json');
-  }
-
-  setState({
-    selectedChannel: Object.assign({}, channelDetails, {
-      subscribed: isSubscribed(channelDetails.id)
-    })
-  });
-}
-
-// event handler
-
-function onToggleSubscribe() {
-  setState({
-    selectedChannel: Object.assign({}, getState().selectedChannel, {
-      subscribed: !getState().selectedChannel.subscribed
-    })
-  });
-  // update subscriptions
-  if(getState().selectedChannel.subscribed) {
-    setState({
-      subscriptions: Object.assign({}, getState().subscriptions, {
-        [getState().selectedChannel.id]: getState().selectedChannel
-      })
-    });  
-  } else {
-    delete getState().subscriptions[getState().selectedChannel.id];
-    setState({
-      subscriptions: getState().subscriptions
-    });
-  }
-}
 
 function onLogout() {
   page.redirect('/logout');
@@ -128,7 +81,8 @@ function subscriptionPage({
   onItemClick,
   onSearchInputChange,
   onTabDetailsSelect,
-  onSelectChannel
+  onSelectChannel,
+  onToggleSubscribe
 }) {
   // inject css
   require('./index.scss');
@@ -156,7 +110,7 @@ function subscriptionPage({
         <div class="container container-subscriptions">
           ${(!subscriptions.isFetching || '') &&
             (!Object.keys(subscriptions.data).length || '') &&
-            (!selectedChannel || '') && 
+            (!selectedChannel.data || '') && 
             yo`
               <div class="row">
                 <div class="col-sm-10 col-sm-offset-1">
@@ -179,14 +133,14 @@ function subscriptionPage({
                 <div class="col-sm-3 col-sm-offset-1">
                   ${subscriptionsList({
                     subscriptions: subscriptions.data,
-                    selectedChannel: selectedChannel,
+                    selectedChannel: selectedChannel.data,
                     onSelectChannel: onSelectChannel
                   })}
                 </div>
               `
             }
             <div class="${Object.keys(subscriptions.data).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
-              ${(selectedChannel || Object.keys(subscriptions.data).length || '') &&
+              ${(selectedChannel.data || Object.keys(subscriptions.data).length || '') &&
                 yo`
                   <form class="search-form">
                     <div class="row">
@@ -200,28 +154,28 @@ function subscriptionPage({
                   </form>
                 `
               }
-              ${(selectedChannel || '') &&
+              ${( (selectedChannel.data && !selectedChannel.error) || '') &&
                 yo`
                   <div>
                     <div class="media">
                       <div class="media-left">
                         <a href="javascript:;">
-                          <img class="media-object" src="${selectedChannel.channelLogo}" alt="logo hima mmb">
+                          <img class="media-object" src="${selectedChannel.data.channelLogo}" alt="logo hima mmb">
                         </a>
                       </div>
                       <div class="media-body">
-                        <h1 class="media-heading">${selectedChannel.channelName}</h1>
-                        <p class="text-muted">${`${selectedChannel.contents.length} contents`}</p>
+                        <h1 class="media-heading">${selectedChannel.data.channelName}</h1>
+                        <p class="text-muted">${`${selectedChannel.data.contents.length} contents`}</p>
                       </div>
                       <div class="media-right">
-                        ${(selectedChannel.subscribed || '') &&
+                        ${(selectedChannel.data.subscribed || '') &&
                           yo`
                             <button class="btn btn-danger" onclick=${onToggleSubscribe} >
                               unsubscribe
                             </button>
                           `
                         }
-                        ${(!selectedChannel.subscribed || '') &&
+                        ${(!selectedChannel.data.subscribed || '') &&
                           yo`
                           <button class="btn btn-success" onclick=${onToggleSubscribe} >
                             + subscribe
@@ -231,7 +185,7 @@ function subscriptionPage({
                       </div>
                     </div>
                     ${navTabDetails({
-                      channel: selectedChannel,
+                      channel: selectedChannel.data,
                       activeTab: activeDetailsTab,
                       onTabSelect: onTabDetailsSelect,
                       colSize: Object.keys(subscriptions.data).length? 'col-sm-4' : 'col-sm-2'

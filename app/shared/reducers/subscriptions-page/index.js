@@ -9,7 +9,7 @@ const initialState = {
   selectedChannel: fetchObjectReducer(undefined, { type: '@@INIT' }),
   activeTabIndex: 0,
   activeDetailsTab: 'Contents'
-}
+};
 
 module.exports = function(state = initialState, action) {
   switch(action.type) {

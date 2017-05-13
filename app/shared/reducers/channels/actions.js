@@ -1,22 +1,20 @@
-/* global module */
+/* global require, module */
+const constants = require('./constants');
+
 const FETCH_CHANNELS = 'FETCH_CHANNELS';
 const RECEIVE_CHANNELS = 'RECEIVE_CHANNELS';
 const FAIL_FETCH_CHANNELS = 'FAIL_FETCH_CHANNELS';
 
-const ORDER_TOTAL = 'mostUploaded';
-const ORDER_DATE_CREATED = 'newest';
-const ORDER_NONE = 'list';
-
 function selectChannelList(rootState) {
-  return rootState.channels[ORDER_NONE];
+  return rootState.channels[constants.ORDER_NONE];
 }
 
 function selectChannelMostUploaded(rootState) {
-  return rootState.channels[ORDER_TOTAL];
+  return rootState.channels[constants.ORDER_TOTAL];
 }
 
 function selectNewestChannels(rootState) {
-  return rootState.channels[ORDER_DATE_CREATED];
+  return rootState.channels[constants.ORDER_DATE_CREATED];
 }
 
 function requestChannel(order) {
@@ -49,50 +47,45 @@ function failFetchChannel(order, error) {
 }
 
 function requestChannelList() {
-  return requestChannel(ORDER_NONE);
+  return requestChannel(constants.ORDER_NONE);
 }
 
 function receiveChannelList(data) {
-  return receiveChannel(ORDER_NONE, data);
+  return receiveChannel(constants.ORDER_NONE, data);
 }
 
 function failFetchChannelList(error) {
-  return failFetchChannel(ORDER_NONE, error);
+  return failFetchChannel(constants.ORDER_NONE, error);
 }
 
 function requestChannelMostUploaded() {
-  return requestChannel(ORDER_TOTAL);
+  return requestChannel(constants.ORDER_TOTAL);
 }
 
 function receiveChannelMostUploaded(data) {
-  return receiveChannel(ORDER_TOTAL, data);
+  return receiveChannel(constants.ORDER_TOTAL, data);
 }
 
-
 function failFetchChannelMostUploaded(error) {
-  return failFetchChannel(ORDER_TOTAL, error);
+  return failFetchChannel(constants.ORDER_TOTAL, error);
 }
 
 function requestNewestChannels() {
-  return requestChannel(ORDER_DATE_CREATED);
+  return requestChannel(constants.ORDER_DATE_CREATED);
 }
 
 function receiveNewestChannels(data) {
-  return receiveChannel(ORDER_DATE_CREATED, data);
+  return receiveChannel(constants.ORDER_DATE_CREATED, data);
 }
 
 function failFetchNewestChannels(error) {
-  return failFetchChannel(ORDER_DATE_CREATED, error);
+  return failFetchChannel(constants.ORDER_DATE_CREATED, error);
 }
 
 module.exports = {
   FETCH_CHANNELS,
   RECEIVE_CHANNELS,
   FAIL_FETCH_CHANNELS,
-
-  ORDER_TOTAL,
-  ORDER_DATE_CREATED,
-  ORDER_NONE,
 
   requestChannelList,
   receiveChannelList,

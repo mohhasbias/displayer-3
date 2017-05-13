@@ -1,5 +1,4 @@
 /* global module */
-
 const SET_ACTIVE_TAB_INDEX = 'SET_ACTIVE_TAB_INDEX';
 
 const SET_ACTIVE_DETAILS_TAB = 'SET_ACTIVE_DETAILS_TAB';

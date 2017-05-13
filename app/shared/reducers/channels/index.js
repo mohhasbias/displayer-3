@@ -4,13 +4,14 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
 const ACTIONS = require('./actions');
+const constants = require('./constants');
 const fetchArrayReducer = require('../fetch-array');
 const fetchArrayActions = require('../fetch-array/actions');
 
 const initialState = {
-  [ACTIONS.ORDER_NONE]: fetchArrayReducer(undefined, {type: '@@INIT'}),
-  [ACTIONS.ORDER_TOTAL]: fetchArrayReducer(undefined, {type: '@@INIT'}),
-  [ACTIONS.ORDER_DATE_CREATED]: fetchArrayReducer(undefined, {type: '@@INIT'})
+  [constants.ORDER_NONE]: fetchArrayReducer(undefined, {type: '@@INIT'}),
+  [constants.ORDER_TOTAL]: fetchArrayReducer(undefined, {type: '@@INIT'}),
+  [constants.ORDER_DATE_CREATED]: fetchArrayReducer(undefined, {type: '@@INIT'})
 };
 
 module.exports = function(state = initialState, action) {

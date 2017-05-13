@@ -20,16 +20,4 @@ var store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-// selectors
-function selectSubscriptions() {
-  return this.getState().subscriptions;
-}
-
-function selectSelectedChannel() {
-  return this.getState().subscriptionsPage.selectedChannel;
-}
-
-module.exports = Object.assign({}, store, {
-  selectSubscriptions,
-  selectSelectedChannel
-});
+module.exports = store;
