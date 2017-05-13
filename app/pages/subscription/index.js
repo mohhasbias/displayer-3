@@ -45,6 +45,12 @@ page('/subscriptions', () => {
       },
       onTabDetailsSelect: (tabName) => {
         store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
+      },
+      onSelectChannel: (channelId) => {
+        // console.log(channelId);
+        var channelDetails = store.selectSubscriptions().data[channelId];
+        // console.log(channelDetails);
+        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelDetails));
       }
     });
   });
@@ -121,7 +127,8 @@ function subscriptionPage({
   onTabSelect,
   onItemClick,
   onSearchInputChange,
-  onTabDetailsSelect
+  onTabDetailsSelect,
+  onSelectChannel
 }) {
   // inject css
   require('./index.scss');
@@ -173,7 +180,7 @@ function subscriptionPage({
                   ${subscriptionsList({
                     subscriptions: subscriptions.data,
                     selectedChannel: selectedChannel,
-                    onSelectChannel: setSelectedChannel
+                    onSelectChannel: onSelectChannel
                   })}
                 </div>
               `

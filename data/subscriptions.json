@@ -1,5 +1,5 @@
-[
-  {
+{
+  "eWRhpRV": {
     "id": "eWRhpRV",
     "channelName": "HIMAMMB",
     "channelLogo": "assets/i/hima-mmb.png",
@@ -127,7 +127,7 @@
       }
     ]
   },
-  {
+  "23TplPdS": {
     "id": "23TplPdS",
     "channelName": "HIMIT",
     "channelLogo": "assets/i/hima-it.png",
@@ -147,4 +147,4 @@
       }
     ]
   }
-]
+}

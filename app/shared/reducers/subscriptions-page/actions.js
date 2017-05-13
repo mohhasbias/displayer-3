@@ -8,6 +8,10 @@ const FETCH_SELECTED_CHANNEL = 'FETCH_SELECTED_CHANNEL';
 const RECEIVE_SELECTED_CHANNEL = 'RECEIVE_SELECTED_CHANNEL';
 const FAIL_FETCH_SELECTED_CHANNEL = 'FAIL_FETCH_SELECTED_CHANNEL';
 
+function setSelectedChannel(channelDetails) {
+  return receiveSelectedChannel(channelDetails);
+}
+
 function requestSelectedChannel() {
   return {
     type: FETCH_SELECTED_CHANNEL
@@ -65,5 +69,6 @@ module.exports = {
 
   requestSelectedChannel,
   receiveSelectedChannel,
-  failFetchSelectedChannel
+  failFetchSelectedChannel,
+  setSelectedChannel
 };
