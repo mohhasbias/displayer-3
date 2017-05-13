@@ -52,7 +52,13 @@ page('/subscriptions', () => {
         store.dispatch(subscriptionsPageActions.setSelectedChannel(channelDetails));
       },
       onToggleSubscribe: () => {
-        console.log('toggle subscribe: ' + selectors.selectSelectedChannel(store.getState()).data.id);
+        var selectedChannel = selectors.selectSelectedChannelWithSubscribeStatus(store.getState()).data;
+        var channelId = selectedChannel.id;
+        if(selectedChannel.subscribed) {
+          subscriptionsEffects.unsubscribeFrom('userid', channelId)(store.dispatch);
+        } else {
+          subscriptionsEffects.subscribeTo('userid', channelId)(store.dispatch);
+        }
       }
     });
   });
