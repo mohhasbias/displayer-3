@@ -28,7 +28,7 @@ page('/subscriptions', () => {
       mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).data, 
       newestChannel: channelActions.selectNewestChannels(store.getState()).data, 
       channels: channelActions.selectChannelList(store.getState()).data, 
-      subscriptions: store.selectSubscriptions().data,
+      subscriptions: store.selectSubscriptions(),
       selectedChannel: store.selectSelectedChannel().error? null : store.selectSelectedChannel().data,
       activeTabIndex: subscriptionsPageActions.selectActiveTabIndex(store.getState()),
       activeDetailsTab: subscriptionsPageActions.selectActiveDetailsTab(store.getState()),
@@ -83,11 +83,6 @@ function setSelectedChannel(channelId) {
 }
 
 // event handler
-function onTabDetailsSelect(tabName) {
-  setState({
-    activeDetailsTab: tabName
-  });
-}
 
 function onToggleSubscribe() {
   setState({
@@ -152,7 +147,8 @@ function subscriptionPage({
       className: 'subscriptions-page',
       children: yo`
         <div class="container container-subscriptions">
-          ${(!Object.keys(subscriptions).length || '') &&
+          ${(!subscriptions.isFetching || '') &&
+            (!Object.keys(subscriptions.data).length || '') &&
             (!selectedChannel || '') && 
             yo`
               <div class="row">
@@ -171,19 +167,19 @@ function subscriptionPage({
               </div>
             `}
           <div class="row">
-            ${(Object.keys(subscriptions).length || '') &&
+            ${(Object.keys(subscriptions.data).length || '') &&
               yo`
                 <div class="col-sm-3 col-sm-offset-1">
                   ${subscriptionsList({
-                    subscriptions: subscriptions,
+                    subscriptions: subscriptions.data,
                     selectedChannel: selectedChannel,
                     onSelectChannel: setSelectedChannel
                   })}
                 </div>
               `
             }
-            <div class="${Object.keys(subscriptions).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
-              ${(selectedChannel || Object.keys(subscriptions).length || '') &&
+            <div class="${Object.keys(subscriptions.data).length? 'col-sm-7' : 'col-sm-10 col-sm-offset-1'}">
+              ${(selectedChannel || Object.keys(subscriptions.data).length || '') &&
                 yo`
                   <form class="search-form">
                     <div class="row">
@@ -231,7 +227,7 @@ function subscriptionPage({
                       channel: selectedChannel,
                       activeTab: activeDetailsTab,
                       onTabSelect: onTabDetailsSelect,
-                      colSize: Object.keys(subscriptions).length? 'col-sm-4' : 'col-sm-2'
+                      colSize: Object.keys(subscriptions.data).length? 'col-sm-4' : 'col-sm-2'
                     })}
                   </div>
                 `

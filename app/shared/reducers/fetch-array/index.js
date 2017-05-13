@@ -10,16 +10,16 @@ const initialFetchResult = {
 
 module.exports = function(state = initialFetchResult, action) {
   switch(action.type) {
-    case ACTIONS.FETCH_START:
+    case ACTIONS.FETCH_ARRAY_START:
       return Object.assign({}, state, {
         isFetching: true
       });
-    case ACTIONS.FETCH_DONE:
+    case ACTIONS.FETCH_ARRAY_DONE:
       return Object.assign({}, state, {
         isFetching: false,
         data: action.payload.data
       });
-    case ACTIONS.FETCH_FAIL:
+    case ACTIONS.FETCH_ARRAY_FAIL:
       return Object.assign({}, state, {
         isFetching: false,
         error: true,

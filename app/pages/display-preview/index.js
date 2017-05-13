@@ -95,23 +95,19 @@ function displayPreviewPage() {
       children: yo`
         <div class="container container-display-preview">
           <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-              <div class="row">
-                <div class="col-sm-4">
-                  ${subscriptionsList({
-                    subscriptions: getState().subscriptions,
-                    selectedChannel: getState().selectedChannel,
-                    onSelectChannel: onSelectChannel
-                  })}
-                </div>
-                <div class="col-sm-8">
-                  <div class="tv-placeholder">
-                    ${carousel({
-                      carouselSetting: carouselSetting,
-                      playlist: getState().selectedChannel && getState().selectedChannel.contents
-                    })}
-                  </div>
-                </div>
+            <div class="col-sm-3 col-sm-offset-1">
+              ${subscriptionsList({
+                subscriptions: getState().subscriptions,
+                selectedChannel: getState().selectedChannel,
+                onSelectChannel: onSelectChannel
+              })}
+            </div>
+            <div class="col-sm-7">
+              <div class="tv-placeholder">
+                ${carousel({
+                  carouselSetting: carouselSetting,
+                  playlist: getState().selectedChannel && getState().selectedChannel.contents
+                })}
               </div>
             </div>
           </div>

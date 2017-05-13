@@ -4,24 +4,24 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
 const ACTIONS = require('./actions');
-const fetchResultReducer = require('../fetch-result');
-const fetchResultActions = require('../fetch-result/actions');
+const fetchArrayReducer = require('../fetch-array');
+const fetchArrayActions = require('../fetch-array/actions');
 
 const initialState = {
-  [ACTIONS.ORDER_NONE]: fetchResultReducer(undefined, {type: '@@INIT'}),
-  [ACTIONS.ORDER_TOTAL]: fetchResultReducer(undefined, {type: '@@INIT'}),
-  [ACTIONS.ORDER_DATE_CREATED]: fetchResultReducer(undefined, {type: '@@INIT'})
+  [ACTIONS.ORDER_NONE]: fetchArrayReducer(undefined, {type: '@@INIT'}),
+  [ACTIONS.ORDER_TOTAL]: fetchArrayReducer(undefined, {type: '@@INIT'}),
+  [ACTIONS.ORDER_DATE_CREATED]: fetchArrayReducer(undefined, {type: '@@INIT'})
 };
 
 module.exports = function(state = initialState, action) {
   switch(action.type) {
     case ACTIONS.FETCH_CHANNELS:
       return Object.assign({}, state, {
-        [action.payload.order]: fetchResultReducer(state[action.payload.order], fetchResultActions.fetchStart())
+        [action.payload.order]: fetchArrayReducer(state[action.payload.order], fetchArrayActions.fetchStart())
       });
     case ACTIONS.RECEIVE_CHANNELS:
       return Object.assign({}, state, {
-        [action.payload.order]: fetchResultReducer(state[action.payload.order], fetchResultActions.fetchDone(action.payload))
+        [action.payload.order]: fetchArrayReducer(state[action.payload.order], fetchArrayActions.fetchDone(action.payload))
       });
     default:
       return state;
