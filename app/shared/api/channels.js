@@ -17,9 +17,16 @@ function fetchChannels(order, onSuccess, onFailure) {
   };
 
   fetch(fetchURL[order])
+    .then(handleFetchNetworkError)
     .then(res => res.json())
     .then(json => onSuccess(json))
     .catch(err => onFailure(err));
+}
+
+function fetchChannelDetails(channelId) {
+  return fetch(`/data/channel-details-${channelId}.json`)
+    .then(handleFetchNetworkError)
+    .then(res => res.json());
 }
 
 module.exports = {
@@ -27,5 +34,14 @@ module.exports = {
   ORDER_BY_TOTAL,
   ORDER_BY_DATE_CREATED,
 
-  fetchChannels
+  fetchChannels,
+  fetchChannelDetails
 };
+
+///////////////////
+function handleFetchNetworkError(res) {
+  if(!res.ok) {
+    throw Error(`${res.status}: ${res.statusText}`);
+  }
+  return res;
+}

@@ -3,37 +3,43 @@
 const ACTIONS = require('./actions');
 const channelAPI = require('../../api/channels');
 
-function fetchChannelList(dispatch) {
+function fetchChannelList() {
   // side effects
-  channelAPI.fetchChannels(
-    channelAPI.ORDER_NONE,
-    (json) => dispatch(ACTIONS.receiveChannelList(json)),
-    (err) => dispatch(ACTIONS.failFetchChannelList(err))
-  );
+  return (dispatch) => {
+    dispatch(ACTIONS.requestChannelList());
 
-  return ACTIONS.requestChannelList();
+    channelAPI.fetchChannels(
+      channelAPI.ORDER_NONE,
+      (json) => dispatch(ACTIONS.receiveChannelList(json)),
+      (err) => dispatch(ACTIONS.failFetchChannelList(err))
+    );
+  };
 }
 
-function fetchChannelMostUploaded(dispatch) {
+function fetchChannelMostUploaded() {
   // side effects
-  channelAPI.fetchChannels(
-    channelAPI.ORDER_BY_TOTAL,
-    (json) => dispatch(ACTIONS.receiveChannelMostUploaded(json)),
-    (err) => dispatch(ACTIONS.failFetchChannelMostUploaded(err))
-  );
+  return (dispatch) => {
+    dispatch(ACTIONS.requestChannelMostUploaded());
 
-  return ACTIONS.requestChannelMostUploaded();
+    channelAPI.fetchChannels(
+      channelAPI.ORDER_BY_TOTAL,
+      (json) => dispatch(ACTIONS.receiveChannelMostUploaded(json)),
+      (err) => dispatch(ACTIONS.failFetchChannelMostUploaded(err))
+    );
+  };
 }
 
-function fetchNewestChannels(dispatch) {
+function fetchNewestChannels() {
   // side effects
-  channelAPI.fetchChannels(
-    channelAPI.ORDER_BY_DATE_CREATED,
-    (json) => dispatch(ACTIONS.receiveNewestChannels(json)),
-    (err) => dispatch(ACTIONS.failFetchNewestChannels(err))
-  );
+  return (dispatch) => {
+    dispatch(ACTIONS.requestNewestChannels());
 
-  return ACTIONS.requestNewestChannels();
+    channelAPI.fetchChannels(
+      channelAPI.ORDER_BY_DATE_CREATED,
+      (json) => dispatch(ACTIONS.receiveNewestChannels(json)),
+      (err) => dispatch(ACTIONS.failFetchNewestChannels(err))
+    );
+  };
 }
 
 module.exports = {

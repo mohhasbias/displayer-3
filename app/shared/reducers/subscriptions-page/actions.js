@@ -1,35 +1,32 @@
-/* global require, module */
+/* global module */
 
-const SET_SELECTED_CHANNEL = 'SET_SELECTED_CHANNEL';
+const SET_ACTIVE_TAB_INDEX = 'SET_ACTIVE_TAB_INDEX';
 
-function selectSelectedChannel(state) {
-  return state.subscriptionsPage.selectedChannel;
-}
+const SET_ACTIVE_DETAILS_TAB = 'SET_ACTIVE_DETAILS_TAB';
 
-function setSelectedChannel(channelId) {
-  console.log(channelId);
-  var channelDetails = {};
-  switch(channelId) {
-    case 'eWRhpRV':
-      channelDetails = require('../../../../data/channel-details-eWRhpRV.json');
-      break;
-    case '23TplPdS':
-      channelDetails = require('../../../../data/channel-details-23TplPdS.json');
-      break;
-    case '46Juzcyx':
-      channelDetails = require('../../../../data/channel-details-46Juzcyx.json');
-      break;
-    default:
-      channelDetails = require('../../../../data/channel-details-eWRhpRV.json');
-  }
+const FETCH_SELECTED_CHANNEL = 'FETCH_SELECTED_CHANNEL';
+const RECEIVE_SELECTED_CHANNEL = 'RECEIVE_SELECTED_CHANNEL';
+const FAIL_FETCH_SELECTED_CHANNEL = 'FAIL_FETCH_SELECTED_CHANNEL';
 
+function requestSelectedChannel() {
   return {
-    type: SET_SELECTED_CHANNEL,
-    payload: channelDetails
+    type: FETCH_SELECTED_CHANNEL
   };
 }
 
-const SET_ACTIVE_TAB_INDEX = 'SET_ACTIVE_TAB_INDEX';
+function receiveSelectedChannel(data) {
+  return {
+    type: RECEIVE_SELECTED_CHANNEL,
+    payload: data
+  };
+}
+
+function failFetchSelectedChannel(error) {
+  return {
+    type: FAIL_FETCH_SELECTED_CHANNEL,
+    payload: error.message
+  };
+}
 
 function selectActiveTabIndex(state) {
   return state.subscriptionsPage.activeTabIndex;
@@ -41,8 +38,6 @@ function setActiveTabIndex(index) {
     payload: index
   };
 }
-
-const SET_ACTIVE_DETAILS_TAB = 'SET_ACTIVE_DETAILS_TAB';
 
 function selectActiveDetailsTab(state) {
   return state.subscriptionsPage.activeDetailsTab;
@@ -56,15 +51,19 @@ function setActiveDetailsTab(tabName) {
 }
 
 module.exports = {
-  SET_SELECTED_CHANNEL,
-  selectSelectedChannel,
-  setSelectedChannel,
-
   SET_ACTIVE_TAB_INDEX,
   selectActiveTabIndex,
   setActiveTabIndex,
 
   SET_ACTIVE_DETAILS_TAB,
   selectActiveDetailsTab,
-  setActiveDetailsTab
+  setActiveDetailsTab,
+
+  FETCH_SELECTED_CHANNEL,
+  RECEIVE_SELECTED_CHANNEL,
+  FAIL_FETCH_SELECTED_CHANNEL,
+
+  requestSelectedChannel,
+  receiveSelectedChannel,
+  failFetchSelectedChannel
 };

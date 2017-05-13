@@ -16,6 +16,7 @@ const store = require('../../shared/store');
 const channelActions = require('../../shared/reducers/channels/actions');
 const channelEffects = require('../../shared/reducers/channels/effects');
 const subscriptionsPageActions = require('../../shared/reducers/subscriptions-page/actions');
+const subscriptionsPageEffects = require('../../shared/reducers/subscriptions-page/effects');
 const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
 
 // routing
@@ -27,18 +28,20 @@ page('/subscriptions', () => {
       mostUploadedContent: channelActions.selectChannelMostUploaded(store.getState()).data, 
       newestChannel: channelActions.selectNewestChannels(store.getState()).data, 
       channels: channelActions.selectChannelList(store.getState()).data, 
-      subscriptions: {},
-      selectedChannel: subscriptionsPageActions.selectSelectedChannel(store.getState()),
+      subscriptions: store.selectSubscriptions().data,
+      selectedChannel: store.selectSelectedChannel().error? null : store.selectSelectedChannel().data,
       activeTabIndex: subscriptionsPageActions.selectActiveTabIndex(store.getState()),
       activeDetailsTab: subscriptionsPageActions.selectActiveDetailsTab(store.getState()),
       onTabSelect: (index) => {
         store.dispatch(subscriptionsPageActions.setActiveTabIndex(index));
       },
       onItemClick: (channelId) => {
-        store.dispatch(subscriptionsPageActions.setSelectedChannel(channelId));
+        subscriptionsPageEffects.fetchSelectedChannel(channelId)(store.dispatch);
       },
       onSearchInputChange: (channel) => {
-        store.dispatch(subscriptionsPageActions.setSelectedChannel(channel.id));
+        if(channel) {
+          subscriptionsPageEffects.fetchSelectedChannel(channel.id)(store.dispatch);
+        }
       },
       onTabDetailsSelect: (tabName) => {
         store.dispatch(subscriptionsPageActions.setActiveDetailsTab(tabName));
@@ -46,10 +49,11 @@ page('/subscriptions', () => {
     });
   });
   // load required data
-  store.dispatch(channelEffects.fetchChannelList(store.dispatch));
-  store.dispatch(channelEffects.fetchChannelMostUploaded(store.dispatch));
-  store.dispatch(channelEffects.fetchNewestChannels(store.dispatch));
-  store.dispatch(subscriptionsEffects.fetchSubscriptions('userid', store.dispatch));
+  // handover dispatch to effects
+  channelEffects.fetchChannelList()(store.dispatch);
+  channelEffects.fetchChannelMostUploaded()(store.dispatch);
+  channelEffects.fetchNewestChannels()(store.dispatch);
+  subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
 });
 
 // page state helper

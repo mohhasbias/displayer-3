@@ -14,16 +14,22 @@ const reducer = combineReducers({
   subscriptions: subscriptionsReducer
 });
 
+// redux store
 var store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 // selectors
-function selectSubscriptions(state) {
-  return state.subscriptions;
+function selectSubscriptions() {
+  return this.getState().subscriptions;
+}
+
+function selectSelectedChannel() {
+  return this.getState().subscriptionsPage.selectedChannel;
 }
 
 module.exports = Object.assign({}, store, {
-  selectSubscriptions
+  selectSubscriptions,
+  selectSelectedChannel
 });
