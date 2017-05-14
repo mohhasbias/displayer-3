@@ -1,6 +1,8 @@
 /* global require, module */
 
-var yo = require('yo-yo');
+const yo = require('yo-yo');
+const shortid = require('shortid');
+const $ = require('jquery');
 
 module.exports = function({ subscriptions, selectedChannel, onSelectChannel }) {
   return yo`
@@ -11,12 +13,21 @@ module.exports = function({ subscriptions, selectedChannel, onSelectChannel }) {
       <div class="list-group">
         ${Object.keys(subscriptions).map(key => {
           var activeClass = selectedChannel && subscriptions[key].id === selectedChannel.id? 'active' : '';
+          var anchorId = shortid.generate();
+          var anchorSelector = `#${anchorId}`;
+
+          $(anchorSelector).ready(() => {
+            $(anchorSelector).off('click');
+            $(anchorSelector).on('click', () => {
+              onSelectChannel && onSelectChannel(subscriptions[key].id)
+            });
+          });
+
           return yo`
             <a 
-              href="javascript:;" 
-              key="${subscriptions[key].channelName}" 
-              class="list-group-item ${activeClass}" 
-              onclick=${() => onSelectChannel(subscriptions[key].id)} 
+              id="${anchorId}"
+              href="javascript:;"
+              class="list-group-item ${activeClass}"
             >
               <span class="badge">${subscriptions[key].contents.length}</span>
               ${subscriptions[key].channelName}

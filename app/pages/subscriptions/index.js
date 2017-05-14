@@ -2,6 +2,7 @@
 const diffhtml = require('diffhtml');
 const yo = require('yo-yo');
 const page = require('page');
+const $ = require('jquery');
 
 // components
 const layout = require('../../components/layout');

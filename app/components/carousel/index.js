@@ -60,9 +60,18 @@ module.exports = function({ carouselSetting, playlist }) {
               `;
               break;
             case 'video/mp4':
+              var videoId = shortid.generate();
+              var videoSelector = `#${videoId}`;
+
+              $(videoSelector).ready(() => {
+                if($(videoSelector).length > 0) {
+                  $(videoSelector).get(0).play();
+                }
+              });
+
               el = yo`
                 <div class="embed-responsive embed-responsive-16by9">
-                  <video class="embed-responsive-item" src="${item.url}" autoplay loop>
+                  <video id="${videoId}" class="embed-responsive-item" src="${item.url}" autoplay loop>
                 </div>
               `;
               break;
