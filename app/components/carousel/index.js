@@ -40,13 +40,17 @@ module.exports = function({ carouselSetting, playlist }) {
   return yo`
     <div id="${refId}" class="carousel slide" data-ride="carousel" data-interval="${carouselSetting.interval}" data-pause="${carouselSetting.pause}">
       <!-- Indicators -->
-      <ol class="carousel-indicators">
-        ${playlist.map((item, idx) => {
-          return yo`
-            <li class="${idx === 0? 'active' : ''}" data-target="${selector}" data-slide-to="${idx}"></li>
-          `;
-        })}
-      </ol>
+      ${(playlist.length > 1 || '') &&
+        yo`
+          <ol class="carousel-indicators">
+            ${playlist.map((item, idx) => {
+              return yo`
+                <li class="${idx === 0? 'active' : ''}" data-target="${selector}" data-slide-to="${idx}"></li>
+              `;
+            })}
+          </ol>
+        `
+      }
 
       <!-- Wrapper for slides -->
       <div class="carousel-inner" role="listbox">
