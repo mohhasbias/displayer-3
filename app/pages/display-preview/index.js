@@ -3,10 +3,11 @@
 const diffhtml = require('diffhtml');
 const yo = require('yo-yo');
 const page = require('page');
+const objectAssign = require('object-assign');
 
 // components
 const layout = require('../../components/layout');
-const subscriptionsList = require('../../components/subscriptions-list');
+const visibileList = require('../../components/visible-list');
 const carousel = require('../../components/carousel');
 
 // app store
@@ -29,29 +30,32 @@ function mapStoreToPage() {
     subscriptions: selectors.selectSubscriptions(store.getState()),
     selectedChannel: selectors.selectSelectedChannel(store.getState()),
 
-    onLogout: () => page.redirect('/logout')
+    onLogout: () => page.redirect('/logout'),
+    onToggleVisible: (channelId) => console.log('toggle visibility', channelId)
   };
 }
 
 // render function
 function displayPreviewPage({
   subscriptions,
-  onLogout
+  onLogout,
+  onToggleVisible
 }) {
   const carouselSetting = {
     interval: 3000,
     pause: null
   };
 
-  const playlist = Object.keys(subscriptions.data)
+  var playlist = Object.keys(subscriptions.data)
     .map(channelId => {
-      return subscriptions.data[channelId].contents;
+      return subscriptions.data[channelId].visible? subscriptions.data[channelId].contents : [];
     })
     .reduce(
       (acc, contents) => acc.concat(contents),
       []
     );
   
+  playlist = playlist.length? playlist : null;
   // console.log(playlist);
 
   require('./index.scss');
@@ -64,8 +68,9 @@ function displayPreviewPage({
         <div class="container container-display-preview">
           <div class="row">
             <div class="col-sm-3 col-sm-offset-1">
-              ${subscriptionsList({
-                subscriptions: subscriptions.data
+              ${visibileList({
+                subscriptions: subscriptions.data,
+                onToggleVisible: onToggleVisible
               })}
             </div>
             <div class="col-sm-7">
