@@ -6,12 +6,17 @@ const page = require('page');
 const $ = require('jquery');
 const keycodes = require('keycode-js');
 
+const store = require('../../shared/store');
+const selectors = require('../../shared/selectors');
+// mock
+selectors.selectErrorMessage = () => null;
+
 const layout = require('../../components/layout');
 
 // routing
 page('/login', (ctx) => {
   if(ctx.init) {
-    loginPage();
+    loginPage(mapStoreToPage());
   } else {
     enterTransition();
   }
@@ -38,7 +43,7 @@ function enterTransition() {
   $('#app').empty();
 
   // render page
-  loginPage();
+  loginPage(mapStoreToPage());
 
   // apply animation
   var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -50,12 +55,28 @@ function enterTransition() {
   });
 }
 
-function login(evt) {
-  evt.preventDefault();
-  page.redirect('/subscriptions');
+function mapStoreToPage() {
+  return {
+    errorMessage: selectors.selectErrorMessage(store.getState())
+  };
 }
 
-function loginPage() {
+function login(evt) {
+  evt.preventDefault();
+  var user = $('.login-form').get(0).email.value;
+  var pass = $('.login-form').get(0).password.value;
+  var loggedIn = user && user.length > 0 && pass && pass.length > 0;
+  if(loggedIn) {
+    page.redirect('/subscriptions');
+  } else {
+    // set login error
+    var errorMessage = 'username or password doesn\'t match';
+    selectors.selectErrorMessage = () => errorMessage;
+    loginPage(mapStoreToPage());
+  }
+}
+
+function loginPage({ errorMessage }) {
   require('./index.scss');
 
   var html = yo`
@@ -65,12 +86,19 @@ function loginPage() {
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
               <form class="login-form">
+                ${(errorMessage || '') &&
+                  yo`
+                    <div class="alert alert-danger" role="alert">
+                      ${errorMessage}
+                    </div>
+                  `
+                }
                 <h1>LOG IN</h1>
                 <div class="form-group">
-                  <input type="email" class="form-control input-lg" placeholder="User ID">
+                  <input type="email" class="form-control input-lg" placeholder="User ID" name="email">
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control input-lg" placeholder="Password">
+                  <input type="password" class="form-control input-lg" placeholder="Password" name="password">
                 </div>
                 <button onclick=${login} class="btn btn-default btn-lg">
                   LOG IN
