@@ -12,21 +12,27 @@ module.exports = function({ subscriptions, onToggleVisible }) {
       </div>
       <div class="list-group">
         ${Object.keys(subscriptions).map(key => {
+          let visible = subscriptions[key].visible;
           return yo`
             <div class="list-group-item">
               <div class="list-group-item-text">
-                ${subscriptions[key].channelName}
+                ${(visible || '') &&
+                  yo`<span class="text-primary">${subscriptions[key].channelName}</span>`
+                }
+                ${(!visible || '') &&
+                  yo`<s class="text-muted">${subscriptions[key].channelName}</s>`
+                }
                 <div class="pull-right">
                   <a 
                     href="javascript:;" 
                     class="btn btn-link btn-xs" 
                     onclick=${() => onToggleVisible(subscriptions[key].id)}
                     >
-                    ${(subscriptions[key].visible || '') &&
+                    ${(visible || '') &&
                       yo`<i class="fa fa-eye icon-visible"></i>`
                     }
-                    ${(!subscriptions[key].visible || '') &&
-                      yo`<i class="fa fa-eye-slash icon-invisible"></i>`
+                    ${(!visible || '') &&
+                      yo`<i class="fa fa-eye-slash icon-invisible text-muted"></i>`
                     }
                   </a>
                 </div>
