@@ -1,38 +1,30 @@
 /* global require, module */
 
-var yo = require('yo-yo');
-var shortid = require('shortid');
-var $ = require('jquery');
+const yo = require('yo-yo');
+const $ = require('jquery');
+const shortid = require('shortid');
 
 // load jquery plugin
 require('bootstrap-3-typeahead');
 
 module.exports = function({ source, onSearchInputChange, className, placeholder }) {
-  const inputId = shortid.generate();
-  const selector = `#${inputId}`;
+  const typeaheadId = shortid.generate();
+  const typeaheadSelector = `.typeahead-${typeaheadId}`;
 
-  $(selector).ready(() => {
-    $(selector).typeahead('destroy');
-    $(selector).typeahead({
+  $(() => {
+    $(typeaheadSelector).typeahead('destroy');
+    $(typeaheadSelector).typeahead({
       source
     });
-
-    $(selector).off('change');
-    $(selector).on('change', function(sel) {
-      return () => {
-        var item = $(sel).typeahead('getActive');
-        onSearchInputChange(item);
-      };
-    }(selector));
   });
 
   return yo`
     <input 
-      id="${inputId}" 
       type="text" 
-      class="form-control ${className || ''}" 
+      class="form-control typeahead-${typeaheadId} ${className || ''}" 
       autocomplete="off"
       placeholder="${placeholder || ''}"
+      onchange=${ evt => onSearchInputChange($(evt.target).typeahead('getActive'))}
       >
-  `;
+  `;  
 }

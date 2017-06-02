@@ -1,6 +1,5 @@
 /* global require, module */
 const yo = require('yo-yo');
-const shortid = require('shortid');
 
 module.exports = ({ value, selectedValue, name, onChange }) => {
   var checked = value === selectedValue;

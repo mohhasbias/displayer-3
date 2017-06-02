@@ -22,4 +22,15 @@
   .search-form {
     margin-bottom: 15px;
   }
+
+  .search-form .search-label {
+    font-size: 60px;
+    text-align: center;
+    font-weight: 700;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    line-height: 60px;
+    margin-top: -15px;
+  }
 }

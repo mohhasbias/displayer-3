@@ -20,14 +20,18 @@ function requestSelectedChannel() {
 function receiveSelectedChannel(data) {
   return {
     type: RECEIVE_SELECTED_CHANNEL,
-    payload: data
+    payload: {
+      data
+    }
   };
 }
 
 function failFetchSelectedChannel(error) {
   return {
     type: FAIL_FETCH_SELECTED_CHANNEL,
-    payload: error.message
+    payload: {
+      error
+    }
   };
 }
 

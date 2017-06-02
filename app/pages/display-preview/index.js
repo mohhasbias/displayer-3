@@ -21,7 +21,6 @@ var storeUnsubscribe;
 var urlPath = '/display-preview';
 page(urlPath, () => {
   storeUnsubscribe = store.subscribe(() => {
-    console.log(__filename, ' listening...');
     displayPreviewPage(mapStoreToPage());
   });
 

@@ -25,7 +25,6 @@ var storeUnsubscribe;
 page(urlPath, () => {
   // subscribe store updates
   storeUnsubscribe = store.subscribe(() => {
-    console.log(__filename, ' listening...');
     // re-render
     subscriptionPage(mapStoreToPage());
   });
@@ -162,14 +161,13 @@ function subscriptionPage({
               ${(selectedChannel.data || Object.keys(subscriptions.data).length || '') &&
                 yo`
                   <form class="search-form">
-                    <div class="row">
-                      <div class="col-sm-6">
-                        ${inputTypeahead({
-                          source: channels,
-                          onSearchInputChange: onSearchInputChange
-                        })}
-                      </div>
+                    <div class="search-label">
+                      search channel
                     </div>
+                    ${inputTypeahead({
+                      source: channels,
+                      onSearchInputChange: onSearchInputChange
+                    })}
                   </form>
                 `
               }
