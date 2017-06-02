@@ -1,14 +1,26 @@
 /* global require, module */
 
 const yo = require('yo-yo');
+const store = require('../../shared/store');
 
 const radioButton = require('../radio-button');
 
+// component state
+let selectedValue = '';
+
+// component behaviour
+function onChange(evt, onSelect) {
+  selectedValue = evt.target.value;
+  onSelect(selectedValue);
+  // notify store
+  store.dispatch({
+    type: '@@RE-RENDER'
+  });  
+}
+
 module.exports = function({ options, onSelect }) {
-  var onChange = (evt) => {
-    console.log(evt.target.value);
-    onSelect(evt.target.value);
-  }
+
+  require('./index.scss');
 
   return yo`
     <div class="panel panel-default player-layout-options">
@@ -16,21 +28,25 @@ module.exports = function({ options, onSelect }) {
         <h3 class="panel-title">Player Layout</h3>
       </div>
       <div class="list-group">
-        
-        <div class="list-group-item">
-          <div class="list-group-item-text">
-            2 x 2 Grid
-            <div class="pull-right">
-              <button class="btn btn-xs btn-link">
-                ${radioButton({
-                  value: 'option1',
-                  selectedValue: 'option2',
-                  onChange: onChange
-                })}
-              </button>
+        ${options.map(option => {
+          return yo`
+            <div class="list-group-item">
+              <div class="list-group-item-text">
+                ${option}
+                <div class="pull-right btn-right">
+                  <button class="btn btn-xs btn-link">
+                    ${radioButton({
+                      value: option,
+                      selectedValue: selectedValue,
+                      name: 'player-layout',
+                      onChange: (evt) => onChange(evt, onSelect)
+                    })}
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          `;
+        })}
       </div>
     </div>
   `;

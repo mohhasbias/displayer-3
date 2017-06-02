@@ -2,8 +2,7 @@
 const yo = require('yo-yo');
 const shortid = require('shortid');
 
-module.exports = ({ value, selectedValue, onChange }) => {
-  var name = shortid.generate();
+module.exports = ({ value, selectedValue, name, onChange }) => {
   var checked = value === selectedValue;
 
   require('./index.scss');
@@ -15,19 +14,25 @@ module.exports = ({ value, selectedValue, onChange }) => {
           type="radio" 
           name="${name}" 
           value="${value}" 
-          ${checked? 'checked="checked"' : ''}
+          ${(checked || '') &&
+            yo`checked`
+          }
           onchange=${onChange}
         >
         ${(checked || '') &&
           yo`
-            <span class="fa-stack fa-lg icon-checked">
+            <span class="fa-stack icon-checked">
               <i class="fa fa-circle-thin fa-stack-2x"></i>
               <i class="fa fa-circle fa-stack-1x"></i>
             </span>
           `
         }
         ${(!checked || '') &&
-          yo`<i class="fa fa-circle-thin icon-unchecked"></i>`
+          yo`
+            <span class="fa-stack icon-checked">
+              <i class="fa fa-circle-thin fa-stack-2x"></i>
+            </span>
+          `
         }
       </label>
     </div>

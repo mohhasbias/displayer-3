@@ -2,11 +2,12 @@
   margin: 0;
 
   input[type="radio"] {
-    // display: none;
+    display: none;
   }
 
   .icon-checked,
   .icon-unchecked {
-    font-size: 19px;
+    margin-right: -3px;
+    margin-left: -20px;
   }
 }

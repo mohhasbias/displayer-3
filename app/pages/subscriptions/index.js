@@ -1,6 +1,7 @@
 /* global require, __filename */
 const yo = require('yo-yo');
 const page = require('page');
+const _ = require('lodash');
 
 // components
 const layout = require('../../components/layout');
@@ -172,7 +173,7 @@ function subscriptionPage({
                   </form>
                 `
               }
-              ${( (selectedChannel.data && !selectedChannel.error) || '') &&
+              ${( (!_.isEmpty(selectedChannel.data) && !selectedChannel.error) || '') &&
                 yo`
                   <div>
                     <div class="media">

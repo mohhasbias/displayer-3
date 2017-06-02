@@ -100,7 +100,7 @@ function displayPreviewPage({
                 onToggleVisible: onToggleVisible
               })}
               ${playerLayoutOptions({
-                subscriptions: subscriptions.data,
+                options: ['2 x 2 Grids', 'No Grid'],
                 onSelect: onSelect
               })}
             </div>

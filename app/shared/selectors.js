@@ -1,6 +1,7 @@
 /* global require, module */
 const { createSelector } = require('reselect');
 const objectAssign = require('object-assign');
+const _ = require('lodash');
 
 const channelConstants = require('./reducers/channels/constants');
 
@@ -19,7 +20,7 @@ const selectSelectedChannelWithSubscribeStatus = createSelector(
   selectSelectedChannel,
   selectSubscriptions,
   (channel, subscriptions) => {
-    if(channel.error || channel.isFetching || !channel.data ||
+    if(channel.error || channel.isFetching || _.isEmpty(channel.data) ||
         subscriptions.error || subscriptions.isFetching || !subscriptions.data) {
       return channel;
     }
