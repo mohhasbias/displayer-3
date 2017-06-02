@@ -6,7 +6,7 @@ const ACTIONS = require('./actions');
 const initialFetchResult = {
   isFetching: false,
   error: false,
-  data: null
+  data: {}
 };
 
 module.exports = function(state = initialFetchResult, action) {
@@ -19,13 +19,13 @@ module.exports = function(state = initialFetchResult, action) {
       return objectAssign({}, state, {
         isFetching: false,
         error: false,
-        data: action.payload
+        data: action.payload.data
       });
     case ACTIONS.FETCH_OBJECT_FAIL:
       return objectAssign({}, state, {
         isFetching: false,
         error: true,
-        data: action.payload
+        data: action.payload.error
       });
     default:
       return state;

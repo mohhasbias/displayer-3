@@ -1,8 +1,6 @@
 /* global require, module */
 
 const yo = require('yo-yo');
-const shortid = require('shortid');
-const $ = require('jquery');
 
 // render function
 module.exports = function({ labels, data, columns, activeTabIndex, onTabSelect, onItemClick }) {
@@ -28,23 +26,12 @@ module.exports = function({ labels, data, columns, activeTabIndex, onTabSelect, 
             return yo`
               <tr>
                 ${columns[activeTabIndex].map(column => {
-                  const linkId = shortid.generate();
-                  const linkSelector = `#${linkId}`;
-
-                  // append onclick through jquery, because diffhtml doesn't make it
-                  $(linkSelector).ready(() => {
-                    $(linkSelector).off('click');
-                    $(linkSelector).on('click', () => {
-                      onItemClick(d.id);
-                    });
-                  });
-
                   return yo`
                     <td>
                       <a           
-                        id="${linkId}"             
                         href="javascript:;" 
                         class="link-unstyled" 
+                        onclick=${() => onItemClick(d.id)}
                       >
                         ${d[column]}
                       </a>

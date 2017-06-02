@@ -1,19 +1,19 @@
 /* global require, module */
 
 const ACTIONS = require('./actions');
-const fetchArrayReducer = require('../fetch-array');
-const fetchArrayActions = require('../fetch-array/actions');
+const fetchObjectReducer = require('../fetch-object');
+const fetchObjectActions = require('../fetch-object/actions');
 
-const initialState = fetchArrayReducer(undefined, {type: '@@INIT'});
+const initialState = fetchObjectReducer(undefined, {type: '@@INIT'});
 
 module.exports = function(state = initialState, action) {
   switch(action.type) {
     case ACTIONS.REQUEST_SUBSCRIPTIONS:
-      return fetchArrayReducer(state, fetchArrayActions.fetchStart());
+      return fetchObjectReducer(state, fetchObjectActions.fetchStart());
     case ACTIONS.RECEIVE_SUBSCRIPTIONS:
-      return fetchArrayReducer(state, fetchArrayActions.fetchDone(action.payload));
+      return fetchObjectReducer(state, fetchObjectActions.fetchDone(action.payload));
     case ACTIONS.FAIL_SUBSCRIPTIONS:
-      return fetchArrayReducer(state, fetchArrayActions.fetchFail(action.payload));
+      return fetchObjectReducer(state, fetchObjectActions.fetchFail(action.payload));
     default:
       return state;
   }

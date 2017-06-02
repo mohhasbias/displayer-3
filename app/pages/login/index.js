@@ -1,7 +1,6 @@
 /* global require, module */
 
 const yo = require('yo-yo');
-const diffhtml = require('diffhtml');
 const page = require('page');
 const $ = require('jquery');
 const keycodes = require('keycode-js');
@@ -111,7 +110,10 @@ function loginPage({ errorMessage }) {
     })}
   `;
 
-  diffhtml.innerHTML(document.getElementById('app'), html);
+  yo.update(
+    document.getElementById('app'),
+    yo`<div id="app">${html}</div>`
+  );
 
   $(document.body).keyup(evt => {
     if (evt.keyCode === keycodes.KEY_ESCAPE) {

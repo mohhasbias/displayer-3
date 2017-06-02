@@ -1,8 +1,6 @@
-/* global require */
-const diffhtml = require('diffhtml');
+/* global require, __filename */
 const yo = require('yo-yo');
 const page = require('page');
-const $ = require('jquery');
 
 // components
 const layout = require('../../components/layout');
@@ -21,9 +19,12 @@ const subscriptionsPageEffects = require('../../shared/reducers/subscriptions-pa
 const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
 
 // routing
-page('/subscriptions', () => {
+var urlPath = '/subscriptions';
+var storeUnsubscribe;
+page(urlPath, () => {
   // subscribe store updates
-  store.subscribe(() => {
+  storeUnsubscribe = store.subscribe(() => {
+    console.log(__filename, ' listening...');
     // re-render
     subscriptionPage(mapStoreToPage());
   });
@@ -33,6 +34,11 @@ page('/subscriptions', () => {
   channelEffects.fetchChannelMostUploaded()(store.dispatch);
   channelEffects.fetchNewestChannels()(store.dispatch);
   subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
+});
+
+page.exit(urlPath, (ctx, next) => {
+  storeUnsubscribe();
+  next();
 });
 
 // store mapper
@@ -213,5 +219,8 @@ function subscriptionPage({
   `;
 
   // render to DOM
-  diffhtml.innerHTML(document.getElementById('app'), html);
+  yo.update(
+    document.getElementById('app'),
+    yo`<div id="app">${html}</div>`
+  );
 }

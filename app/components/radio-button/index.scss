@@ -1,0 +1,12 @@
+.radio {
+  margin: 0;
+
+  input[type="radio"] {
+    // display: none;
+  }
+
+  .icon-checked,
+  .icon-unchecked {
+    font-size: 19px;
+  }
+}

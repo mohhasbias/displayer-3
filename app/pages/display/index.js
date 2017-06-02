@@ -1,7 +1,6 @@
 /* global require, module */
 
 const yo = require('yo-yo');
-const diffhtml = require('diffhtml');
 const $ = require('jquery');
 const page = require('page');
 const keycodes = require('keycode-js');
@@ -113,9 +112,9 @@ function displayPage() {
   `;
 
   // render to DOM
-  diffhtml.innerHTML(
+  yo.update(
     document.getElementById('app'),
-    html
+    yo`<div id="app">${html}</div>`
   );
 
   // apply jquery plugins

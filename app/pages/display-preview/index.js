@@ -1,13 +1,13 @@
-/* global require, module */
+/* global require, module, __filename */
 
-const diffhtml = require('diffhtml');
 const yo = require('yo-yo');
 const page = require('page');
 const objectAssign = require('object-assign');
 
 // components
 const layout = require('../../components/layout');
-const visibileList = require('../../components/visible-list');
+const visibleList = require('../../components/visible-list');
+const playerLayoutOptions = require('../../components/player-layout-options');
 const carousel = require('../../components/carousel');
 
 // app store
@@ -17,21 +17,47 @@ const selectors = require('../../shared/selectors');
 const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
 
 // routing
-page('/display-preview', () => {
-  store.subscribe(() => {
+var storeUnsubscribe;
+var urlPath = '/display-preview';
+page(urlPath, () => {
+  storeUnsubscribe = store.subscribe(() => {
+    console.log(__filename, ' listening...');
     displayPreviewPage(mapStoreToPage());
   });
 
   subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
 });
 
+page.exit(urlPath, (ctx, next) => {
+  storeUnsubscribe();
+  next();
+});
+
+const schedule = {};
+function mockSubscriptions() {
+  const subscriptions = selectors.selectSubscriptions(store.getState());
+  Object.keys(subscriptions.data).forEach(channelId => {
+    subscriptions.data[channelId] = objectAssign({}, subscriptions.data[channelId], {
+      visible: schedule[channelId] || false
+    });
+  });
+  return subscriptions;
+}
+
 function mapStoreToPage() {
   return {
-    subscriptions: selectors.selectSubscriptions(store.getState()),
+    // subscriptions: selectors.selectSubscriptions(store.getState()),
+    subscriptions: mockSubscriptions(),
     selectedChannel: selectors.selectSelectedChannel(store.getState()),
 
     onLogout: () => page.redirect('/logout'),
-    onToggleVisible: (channelId) => console.log('toggle visibility', channelId)
+    onToggleVisible: (channelId) => {
+      schedule[channelId] = !schedule[channelId];
+      store.dispatch({
+        type: '@@UPDATE'
+      });
+    },
+    onSelect: (playerLayout) => console.log('selected layout: ', playerLayout)
   };
 }
 
@@ -39,7 +65,8 @@ function mapStoreToPage() {
 function displayPreviewPage({
   subscriptions,
   onLogout,
-  onToggleVisible
+  onToggleVisible,
+  onSelect
 }) {
   const carouselSetting = {
     interval: 3000,
@@ -68,9 +95,13 @@ function displayPreviewPage({
         <div class="container container-display-preview">
           <div class="row">
             <div class="col-sm-3 col-sm-offset-1">
-              ${visibileList({
+              ${visibleList({
                 subscriptions: subscriptions.data,
                 onToggleVisible: onToggleVisible
+              })}
+              ${playerLayoutOptions({
+                subscriptions: subscriptions.data,
+                onSelect: onSelect
               })}
             </div>
             <div class="col-sm-7">
@@ -87,7 +118,10 @@ function displayPreviewPage({
     })}
   `;
 
-  diffhtml.innerHTML(document.getElementById('app'), html);
+  yo.update(
+    document.getElementById('app'),
+    yo`<div id="app">${html}</div>`
+  );
 }
 
 module.exports = displayPreviewPage;

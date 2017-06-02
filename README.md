@@ -44,10 +44,10 @@ function clickMe() {
 ```
 
 ## Patch based DOM rendering
-DOM rendering is provided by [diffhtml](https://diffhtml.org/). It renders only the different between current DOM and updated DOM. Similar to the way React works.
+DOM rendering is done by `yo-yo`.It renders only the different between current DOM and updated DOM. Similar to the way React works.
 
 ```javascript
-diffhtml.innerHTML(document.body, '<h1>Hello</h1>'); // it will append h1 only if it is not exists
+yo.update(document.body, '<h1>Hello</h1>'); // it will append h1 only if it is not exists
 ```
 
 ## Styling
