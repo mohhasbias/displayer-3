@@ -1,8 +1,6 @@
-/* global require, module, __filename */
+/* global require, module */
 
 const yo = require('yo-yo');
-const page = require('page');
-const objectAssign = require('object-assign');
 
 // components
 const layout = require('../../components/layout');
@@ -10,58 +8,8 @@ const visibleList = require('../../components/visible-list');
 const playerLayoutOptions = require('../../components/player-layout-options');
 const carousel = require('../../components/carousel');
 
-// app store
-const store = require('../../shared/store');
-const selectors = require('../../shared/selectors');
-
-const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
-
-// routing
-var storeUnsubscribe;
-var urlPath = '/display-preview';
-page(urlPath, () => {
-  storeUnsubscribe = store.subscribe(() => {
-    displayPreviewPage(mapStoreToPage());
-  });
-
-  subscriptionsEffects.fetchSubscriptions('userid')(store.dispatch);
-});
-
-page.exit(urlPath, (ctx, next) => {
-  storeUnsubscribe();
-  next();
-});
-
-const schedule = {};
-function mockSubscriptions() {
-  const subscriptions = selectors.selectSubscriptions(store.getState());
-  Object.keys(subscriptions.data).forEach(channelId => {
-    subscriptions.data[channelId] = objectAssign({}, subscriptions.data[channelId], {
-      visible: schedule[channelId] || false
-    });
-  });
-  return subscriptions;
-}
-
-function mapStoreToPage() {
-  return {
-    // subscriptions: selectors.selectSubscriptions(store.getState()),
-    subscriptions: mockSubscriptions(),
-    selectedChannel: selectors.selectSelectedChannel(store.getState()),
-
-    onLogout: () => page.redirect('/logout'),
-    onToggleVisible: (channelId) => {
-      schedule[channelId] = !schedule[channelId];
-      store.dispatch({
-        type: '@@UPDATE'
-      });
-    },
-    onSelect: (playerLayout) => console.log('selected layout: ', playerLayout)
-  };
-}
-
 // render function
-function displayPreviewPage({
+function render({
   subscriptions,
   onLogout,
   onToggleVisible,
@@ -86,7 +34,7 @@ function displayPreviewPage({
 
   require('./index.scss');
 
-  var html = yo`
+  return yo`
     ${layout({
       loggedIn: true,
       onLogout: onLogout,
@@ -116,11 +64,6 @@ function displayPreviewPage({
       `
     })}
   `;
-
-  yo.update(
-    document.getElementById('app'),
-    yo`<div id="app">${html}</div>`
-  );
 }
 
-module.exports = displayPreviewPage;
+module.exports = render;
