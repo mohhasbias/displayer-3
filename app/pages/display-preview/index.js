@@ -16,10 +16,11 @@ function render({
   onToggleVisible,
   layoutOptions,
   onSelectLayout,
-  selectedPlayerLayout
+  selectedPlayerLayout,
+  carouselInterval
 }) {
   const carouselSetting = {
-    interval: 3000,
+    interval: carouselInterval || 3000,
     pause: null
   };
 

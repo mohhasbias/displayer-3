@@ -6,12 +6,14 @@ const { createStore, combineReducers } = require('redux');
 const channelsReducer = require('./reducers/channels');
 const subscriptionsPageReducer = require('./reducers/subscriptions-page');
 const subscriptionsReducer = require('./reducers/subscriptions');
+const schedulesReducer = require('./reducers/schedules');
 
 // app combined reducer
 const reducer = combineReducers({
   channels: channelsReducer,
   subscriptionsPage: subscriptionsPageReducer,
-  subscriptions: subscriptionsReducer
+  subscriptions: subscriptionsReducer,
+  schedules: schedulesReducer
 });
 
 // redux store
