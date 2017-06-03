@@ -10,6 +10,10 @@ var channels = {
   '23TplPdS': require('../../../data/channel-details-23TplPdS.json')
 };
 
+Object.keys(subscriptions).forEach(channelId => {
+  subscriptions[channelId] = channels[channelId];
+});
+
 function fetchSubscriptions(userId) {
   return new Promise(resolve => resolve(subscriptions));
 }

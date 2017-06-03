@@ -29,6 +29,24 @@
       "thumbUrl": "assets/i/JadwalKP-thumb.jpg"
     },
     {
+      "url": "assets/i/lion.jpeg",
+      "type": "image/jpeg",
+      "name": "lion",
+      "thumbUrl": "assets/i/lion-thumb.jpeg"
+    },
+    {
+      "url": "assets/i/walrus.jpeg",
+      "type": "image/jpeg",
+      "name": "walrus",
+      "thumbUrl": "assets/i/walrus-thumb.jpeg"
+    },
+    {
+      "url": "assets/i/strawberry.jpeg",
+      "type": "image/jpeg",
+      "name": "strawberry",
+      "thumbUrl": "assets/i/strawberry-thumb.jpeg"
+    },
+    {
       "url": "assets/i/FP.png",
       "type": "image/png",
       "name": "FP",

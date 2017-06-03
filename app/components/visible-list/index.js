@@ -8,11 +8,11 @@ module.exports = function({ subscriptions, onToggleVisible }) {
   return yo`
     <div class="panel panel-default visible-list">
       <div class="panel-heading">
-        <h3 class="panel-title">Subscribed channel</h3>
+        <h3 class="panel-title">Scheduled channel</h3>
       </div>
       <div class="list-group">
         ${Object.keys(subscriptions).map(key => {
-          let visible = subscriptions[key].visible;
+          const visible = subscriptions[key].visible;
           return yo`
             <div class="list-group-item">
               <div class="list-group-item-text">

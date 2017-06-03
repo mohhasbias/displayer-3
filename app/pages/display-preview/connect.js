@@ -7,7 +7,10 @@ const selectors = require('../../shared/selectors');
 
 const displayPreviewPage = require('./index');
 
-const schedule = {};
+// const schedule = {};
+const schedule = {
+  'eWRhpRV': true
+};
 function mockSubscriptions() {
   const subscriptions = selectors.selectSubscriptions(store.getState());
   Object.keys(subscriptions.data).forEach(channelId => {
