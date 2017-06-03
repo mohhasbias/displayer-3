@@ -18,7 +18,8 @@ function onChange(evt, onSelect) {
   });  
 }
 
-module.exports = function({ options, onSelect }) {
+module.exports = function({ options, onSelect, selectedValue }) {
+  this.selectedValue = selectedValue;
 
   require('./index.scss');
 

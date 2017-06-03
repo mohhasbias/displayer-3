@@ -18,11 +18,18 @@ function mockSubscriptions() {
   return subscriptions;
 }
 
+let selectedPlayerLayout = '2 x 2 Grids';
+function mockPlayerLayout() {
+  return selectedPlayerLayout;
+}
+
 function mapStoreToPage() {
   return {
     // subscriptions: selectors.selectSubscriptions(store.getState()),
     subscriptions: mockSubscriptions(),
     selectedChannel: selectors.selectSelectedChannel(store.getState()),
+    layoutOptions: ['2 x 2 Grids', 'No Grid'],
+    selectedPlayerLayout: mockPlayerLayout(),
 
     onLogout: () => page.redirect('/logout'),
     onToggleVisible: (channelId) => {
@@ -31,7 +38,13 @@ function mapStoreToPage() {
         type: '@@UPDATE'
       });
     },
-    onSelect: (playerLayout) => console.log('selected layout: ', playerLayout)
+    onSelectLayout: (playerLayout) => {
+      console.log('selected layout: ', playerLayout);
+      selectedPlayerLayout = playerLayout;
+      store.dispatch({
+        type: '@@UPDATE'
+      });
+    }
   };
 }
 

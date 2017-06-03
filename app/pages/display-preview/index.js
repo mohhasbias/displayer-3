@@ -7,13 +7,16 @@ const layout = require('../../components/layout');
 const visibleList = require('../../components/visible-list');
 const playerLayoutOptions = require('../../components/player-layout-options');
 const carousel = require('../../components/carousel');
+const twoByTwoCarousel = require('../../components/two-by-two-carousel');
 
 // render function
 function render({
   subscriptions,
   onLogout,
   onToggleVisible,
-  onSelect
+  layoutOptions,
+  onSelectLayout,
+  selectedPlayerLayout
 }) {
   const carouselSetting = {
     interval: 3000,
@@ -30,7 +33,6 @@ function render({
     );
   
   playlist = playlist.length? playlist : null;
-  // console.log(playlist);
 
   require('./index.scss');
 
@@ -47,16 +49,36 @@ function render({
                 onToggleVisible: onToggleVisible
               })}
               ${playerLayoutOptions({
-                options: ['2 x 2 Grids', 'No Grid'],
-                onSelect: onSelect
+                options: layoutOptions,
+                onSelect: onSelectLayout,
+                selectedValue: selectedPlayerLayout
               })}
             </div>
             <div class="col-sm-7">
               <div class="tv-placeholder">
-                ${carousel({
-                  carouselSetting: carouselSetting,
-                  playlist: playlist
-                })}
+                ${ (selectedPlayerLayout === 'No Grid' || '') &&
+                  carousel({
+                    carouselSetting: carouselSetting,
+                    playlist: playlist
+                  })
+                }
+                ${ (selectedPlayerLayout === '2 x 2 Grids' || '') &&
+                  twoByTwoCarousel({
+                    carouselSetting: carouselSetting,
+                    playlist: playlist   
+                  })
+                }
+              </div>
+              <div class="text-center">
+                Duration interval for each content: 
+                <select>
+                  <option value="1" ${carouselSetting.interval === 1*1000? 'selected' :''}>1</option>
+                  <option value="2" ${carouselSetting.interval === 2*1000? 'selected' :''}>2</option>
+                  <option value="3" ${carouselSetting.interval === 3*1000? 'selected' :''}>3</option>
+                  <option value="4" ${carouselSetting.interval === 4*1000? 'selected' :''}>4</option>
+                  <option value="5" ${carouselSetting.interval === 5*1000? 'selected' :''}>5</option>
+                </select>
+                seconds
               </div>
             </div>
           </div>

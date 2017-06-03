@@ -10,15 +10,6 @@ const mime = require('browserify-mime');
 require('bootstrap');
 
 const defaultPlaylist = [
-  // {
-  //   url: 'assets/i/walrus.jpeg'
-  // },
-  // {
-  //   url: 'assets/i/strawberry.jpeg'
-  // },
-  // {
-  //   url: 'assets/i/lion.jpeg'
-  // }
   {
     url: 'assets/video/OPD.mp4'
   }
