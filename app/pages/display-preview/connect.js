@@ -8,6 +8,11 @@ const schedulesActions = require('../../shared/reducers/schedules/actions');
 
 const displayPreviewPage = require('./index');
 
+module.exports = function() {
+  return displayPreviewPage(mapStoreToPage());
+};
+
+//////////////////////////////////////////
 let selectedPlayerLayout = '2 x 2 Grids';
 function mockPlayerLayout() {
   return selectedPlayerLayout;
@@ -37,7 +42,3 @@ function mapStoreToPage() {
     }
   };
 }
-
-module.exports = function() {
-  return displayPreviewPage(mapStoreToPage());
-};

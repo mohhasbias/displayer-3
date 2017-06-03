@@ -5,9 +5,10 @@ const yo = require('yo-yo');
 
 const store = require('./shared/store');
 const displayPreviewRoute = require('./pages/display-preview/route');
+const displayRoute = require('./pages/display/route');
 
 // attach pages, each contain route
-require('./pages/display');
+// require('./pages/display');
 require('./pages/login');
 require('./pages/subscriptions');
 require('./pages/logout');
@@ -16,7 +17,8 @@ require('./pages/logout');
 require('./app.scss');
 
 // set routes
-page(displayPreviewRoute.urlPath, () => renderPage(displayPreviewRoute));
+page(displayPreviewRoute.urlPath, (ctx) => renderPage(ctx, displayPreviewRoute));
+page(displayRoute.urlPath, (ctx) => renderPage(ctx, displayRoute));
 
 // default route
 page('/', () => page.redirect('/display'));
@@ -25,9 +27,9 @@ page('*', () => document.getElementById('app').innerHTML = '<h1>404 - Not Found<
 page.start();
 
 ////////////////////////////////////
-function renderPage(route) {
+function renderPage(ctx, route) {
   // execute on enter path
-  route.onEnterPath();
+  route.onEnterPath(ctx);
   // initial render
   renderToDOM(
     document.getElementById('app'),
@@ -43,7 +45,11 @@ function renderPage(route) {
   // unsubscribe store on path exit
   page.exit(route.urlPath, (ctx, next) => {
     unsubscribe();
-    next();
+    if(route.onExitPath) {
+      route.onExitPath(ctx, next);
+    } else {
+      next();
+    }
   });
 }
 
