@@ -6,8 +6,7 @@ const yo = require('yo-yo');
 const layout = require('../../components/layout');
 const visibleList = require('../../components/visible-list');
 const playerLayoutOptions = require('../../components/player-layout-options');
-const carousel = require('../../components/carousel');
-const twoByTwoCarousel = require('../../components/two-by-two-carousel');
+const multiLayoutCarousel = require('../../components/multi-layout-carousel');
 
 // render function
 function render({
@@ -47,18 +46,11 @@ function render({
             </div>
             <div class="col-sm-7">
               <div class="tv-placeholder">
-                ${ (selectedPlayerLayout === 'No Grid' || '') &&
-                  carousel({
-                    carouselSetting: carouselSetting,
-                    playlist: playlist
-                  })
-                }
-                ${ (selectedPlayerLayout === '2 x 2 Grids' || '') &&
-                  twoByTwoCarousel({
-                    carouselSetting: carouselSetting,
-                    playlist: playlist   
-                  })
-                }
+                ${multiLayoutCarousel({
+                  layout: selectedPlayerLayout,
+                  carouselSetting,
+                  playlist
+                })}
               </div>
               <div class="text-center">
                 Duration interval for each content: 

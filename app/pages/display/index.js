@@ -2,7 +2,7 @@
 
 const yo = require('yo-yo');
 
-const carousel = require('../../components/carousel');
+const multiLayoutCarousel = require('../../components/multi-layout-carousel');
 
 // page renderer
 function render({
@@ -10,7 +10,9 @@ function render({
   playlist
 }) {
   return yo`
-    ${carousel({
+    ${multiLayoutCarousel({
+      // layout: 'No Grid',
+      layout: '2 x 2 Grids',
       carouselSetting,
       playlist
     })}
