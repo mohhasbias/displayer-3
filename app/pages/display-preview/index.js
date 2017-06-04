@@ -17,23 +17,13 @@ function render({
   layoutOptions,
   onSelectLayout,
   selectedPlayerLayout,
-  carouselInterval
+  carouselInterval,
+  playlist
 }) {
   const carouselSetting = {
     interval: carouselInterval || 3000,
     pause: null
   };
-
-  var playlist = Object.keys(subscriptions.data)
-    .map(channelId => {
-      return subscriptions.data[channelId].visible? subscriptions.data[channelId].contents : [];
-    })
-    .reduce(
-      (acc, contents) => acc.concat(contents),
-      []
-    );
-  
-  playlist = playlist.length? playlist : null;
 
   require('./index.scss');
 

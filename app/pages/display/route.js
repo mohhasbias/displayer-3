@@ -3,18 +3,20 @@ const $ = require('jquery');
 const page = require('page');
 const keycodes = require('keycode-js');
 
+const store = require('../../shared/store');
+const subscriptionsEffects = require('../../shared/reducers/subscriptions/effects');
+
 const component = require('./connect');
 
 const urlPath = '/display';
 // routing
 const onEnterPath = (ctx) => {
-  if(ctx.init) {
-    // displayPage();
-  } else {
+  if(!ctx.init) {
     enterTransition();
   }
   // keybinding
   $(document.body).keyup(keyboardNavigation);
+  subscriptionsEffects.fetchSubscriptions('userId')(store.dispatch);
 };
 
 const onExitPath = (ctx, next) => {

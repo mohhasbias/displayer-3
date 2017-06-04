@@ -2,6 +2,9 @@
 
 const displayPage = require('./index');
 
+const store = require('../../shared/store');
+const selectors = require('../../shared/selectors');
+
 module.exports = function() {
   return displayPage(mapStoreToPage());
 };
@@ -12,15 +15,9 @@ const carouselSetting = {
   pause: null
 };
 
-const selectedChannel = {
-  data: null
-};
-
-const playlist = selectedChannel.data && selectedChannel.data.contents;
-
 function mapStoreToPage() {
   return {
     carouselSetting,
-    playlist
+    playlist: selectors.selectPlaylist(store.getState())
   };
 }

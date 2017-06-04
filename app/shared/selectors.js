@@ -15,9 +15,6 @@ const selectSelectedChannel = state => state.subscriptionsPage.selectedChannel;
 const selectActiveTabIndex = state => state.subscriptionsPage.activeTabIndex;
 const selectActiveDetailsTab = state => state.subscriptionsPage.activeDetailsTab;
 
-// const selectSchedule = state => ({
-//   'eWRhpRV': true
-// });
 const selectSchedules = state => state.schedules;
 
 // computed selector
@@ -58,6 +55,24 @@ const selectSubscriptionsWithSchedules = createSelector(
   }
 );
 
+const selectPlaylist = createSelector(
+  selectSubscriptionsWithSchedules,
+  (subscriptions) => {
+    let playlist = Object.keys(subscriptions.data)
+    .map(channelId => {
+      return subscriptions.data[channelId].visible? subscriptions.data[channelId].contents : [];
+    })
+    .reduce(
+      (acc, contents) => acc.concat(contents),
+      []
+    );
+  
+    playlist = playlist.length? playlist : null;
+
+    return playlist;
+  }
+)
+
 module.exports = {
   selectSubscriptions,
   selectSelectedChannel,
@@ -69,5 +84,6 @@ module.exports = {
   
   // computed selector
   selectSelectedChannelWithSubscribeStatus,
-  selectSubscriptionsWithSchedules
+  selectSubscriptionsWithSchedules,
+  selectPlaylist
 };

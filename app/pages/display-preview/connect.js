@@ -24,6 +24,7 @@ function mapStoreToPage() {
     layoutOptions: ['2 x 2 Grids', 'No Grid'],
     selectedPlayerLayout: mockPlayerLayout(),
     carouselInterval: 5000,
+    playlist: selectors.selectPlaylist(store.getState()),
 
     onLogout: () => page.redirect('/logout'),
     onToggleVisible: (channelId) => {
