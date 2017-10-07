@@ -5,6 +5,7 @@ const store = require('../../shared/store');
 const selectors = require('../../shared/selectors');
 
 const schedulesActions = require('../../shared/reducers/schedules/actions');
+const carouselIntervalActions = require('../../shared/reducers/carousel-interval/actions');
 
 const displayPreviewPage = require('./index');
 
@@ -23,7 +24,8 @@ function mapStoreToPage() {
     subscriptions: selectors.selectSubscriptionsWithSchedules(store.getState()),
     layoutOptions: ['2 x 2 Grids', 'No Grid'],
     selectedPlayerLayout: mockPlayerLayout(),
-    carouselInterval: 5000,
+    // carouselInterval: 3000,
+    carouselInterval: selectors.selectCarouselInterval(store.getState()),
     playlist: selectors.selectPlaylist(store.getState()),
 
     onLogout: () => page.redirect('/logout'),
@@ -40,6 +42,9 @@ function mapStoreToPage() {
       store.dispatch({
         type: '@@UPDATE'
       });
+    },
+    onCarouselIntervalChange: (interval) => {
+      store.dispatch(carouselIntervalActions.setCarouselInterval(interval));
     }
   };
 }

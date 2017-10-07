@@ -10,14 +10,12 @@ module.exports = function() {
 };
 
 ////////////////////////////////////
-const carouselSetting = {
-  interval: 10000,
-  pause: null
-};
-
 function mapStoreToPage() {
   return {
-    carouselSetting,
+    carouselSetting: {
+      pause: null,
+      interval: selectors.selectCarouselInterval(store.getState())
+    },
     playlist: selectors.selectPlaylist(store.getState())
   };
 }

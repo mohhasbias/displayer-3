@@ -17,6 +17,8 @@ const selectActiveDetailsTab = state => state.subscriptionsPage.activeDetailsTab
 
 const selectSchedules = state => state.schedules;
 
+const selectCarouselInterval = state => state.carouselInterval;
+
 // computed selector
 const selectSelectedChannelWithSubscribeStatus = createSelector(
   selectSelectedChannel,
@@ -85,5 +87,7 @@ module.exports = {
   // computed selector
   selectSelectedChannelWithSubscribeStatus,
   selectSubscriptionsWithSchedules,
-  selectPlaylist
+  selectPlaylist,
+
+  selectCarouselInterval
 };

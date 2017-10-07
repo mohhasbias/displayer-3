@@ -19,4 +19,8 @@
   .carousel-inner .item img {
     margin: auto;
   }
+
+  .carousel-inner .item {
+    transition: none;
+  }
 }

@@ -17,7 +17,8 @@ function render({
   onSelectLayout,
   selectedPlayerLayout,
   carouselInterval,
-  playlist
+  playlist,
+  onCarouselIntervalChange
 }) {
   const carouselSetting = {
     interval: carouselInterval || 3000,
@@ -54,7 +55,9 @@ function render({
               </div>
               <div class="text-center">
                 Duration interval for each content: 
-                <select>
+                <select onchange=${(evt) => {
+                  onCarouselIntervalChange(evt.target.value * 1000);
+                }}>
                   <option value="1" ${carouselSetting.interval === 1*1000? 'selected' :''}>1</option>
                   <option value="2" ${carouselSetting.interval === 2*1000? 'selected' :''}>2</option>
                   <option value="3" ${carouselSetting.interval === 3*1000? 'selected' :''}>3</option>

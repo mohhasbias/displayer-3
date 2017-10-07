@@ -24,6 +24,15 @@ module.exports = function({ carouselSetting, playlist }) {
     $(selector).carousel(carouselSetting);
   });
 
+  $(() => {
+    $(selector).on('slide.bs.carousel', () => {
+      // console.log('slide event');
+    });
+    $(selector).on('slid.bs.carousel', () => {
+      // console.log('slid event');
+    });
+  });
+
   playlist = playlist || defaultPlaylist;
 
   require('./index.scss');
